@@ -147,4 +147,222 @@
         "rajstopy w drobne kropki", "rajstopy bezpalcowe", "rajstopy ze szwem i wzorem",
         "rajstopy wzorzyste geometryczne", "legginsy błyszczące", "rajstopy kryjące cieliste",
         "rajstopy modelujące pośladki", "kabaretki założone na gładkie rajstopy", "rajstopy matowe 60D",
-        "legginsy z wysokim stanem", "rajstopy cz
+        "legginsy z wysokim stanem", "rajstopy czarne z połyskiem"
+      ];
+
+      const dresses = [
+        "sukienkę bodycon", "sukienkę maxi", "rozkloszowaną spódnicę i bluzkę", "ołówkową spódnicę",
+        "kwiatową sukienkę", "małą czarną", "sukienkę midi", "dzianinową sukienkę",
+        "czerwoną sukienkę bodycon", "plisowaną spódnicę maxi", "skórzaną spódnicę ołówkową",
+        "satynową sukienkę slip dress", "sukienkę kopertową z wiązaniem", "sukienkę z głębokim dekoltem",
+        "elegancki komplet ze spódnicą", "sukienkę w kratkę", "sukienkę z golfem dopasowaną",
+        "spódnicę tiulową z topem", "sukienkę z rozcięciem na udzie", "sukienkę aksamitną"
+      ];
+
+      const clampsTypes = [
+        "clover clamps", "spinacze z ciężarkami", "metalowe zaciski klamrowe", "zaciski klamrowe z dzwoneczkami",
+        "ciężkie zaciski śrubowe", "klamry sutkowe na łańcuszku", "zaciski z miękką osłonką",
+        "regulowane klamry sprężynowe", "małe klamerki zaciskowe", "zaciski z ozdobnymi piórkami",
+        "klamry z lekkim obciążeniem", "metalowe klipsy zaciskowe", "zaciski klamrowe połączone łańcuszkiem",
+        "klamry śrubowe z regulacją nacisku", "zaciski z silikonową podkładką", "małe spinacze z odważnikami",
+        "klipsy zaciskowe do intensywnej stymulacji", "klamry sprężynowe z dzwonkami", "zaciski rurkowe", "ciężkie klamry metalowe"
+      ];
+
+      const exerciseTypes = [
+        "chodzenie w szpilkach po prostej linii z książką na głowie",
+        "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
+        "trzymanie głębokiego przysiadu w szpilkach i sukience",
+        "wykonanie powolnych zakroków z zachowaniem idealnej postawy",
+        "poruszanie się na kolanach ze skrzyżowanymi kostkami z tyłu",
+        "chodzenie na palcach w szpilkach z rękami skutymi na plecach",
+        "utrzymanie pozycji 'jaskółki' (balans na jednej nodze) w szpilkach przez 2 minuty",
+        "chodzenie ze skrępowanymi kostkami ciasnym krokiem po pokoju",
+        "utrzymanie półprzysiadu przy ścianie z obcasami uniesionymi w górę",
+        "wykonanie 20 ukłonów przed lustrem ze skutymi dłońmi z przodu",
+        "stanie w pełnym wyproście ze złączonymi piętami i kajdankami na rękach przez 5 minut",
+        "klęczenie na twardej podłodze ze skutymi dłońmi za plecami i prostym kręgosłupem",
+        "chodzenie powolnym krokiem z rękami skutymi do pas/obroży",
+        "wykonanie 15 powolnych przysiadów ze skutymi kostkami",
+        "chodzenie tyłem po wyznaczonej prostej linii na obcasach",
+        "utrzymanie pozycji kucającej na palcach z kajdankami na nadgarstkach",
+        "chodzenie na kolanach ze skutymi nadgarstkami z tyłu i skrzyżowanymi nogami",
+        "utrzymanie nieruchomej pozycji uległej na kolanach z rękami z tyłu",
+        "wykonanie serii zakroków w miejscu ze skutymi rękami na plecach",
+        "powolne wznosy na palcach stóp w szpilkach z dłońmi spiętymi z tyłu"
+      ];
+
+      const modifiers = [
+        "Modyfikator BDSM: Ręce zakute w skórzane/metalowe kajdanki za plecami na całe zadanie.",
+        "Modyfikator BDSM: Nogi skute w kajdanki na kostkach (uniemożliwiające szerokie kroki).",
+        "Modyfikator BDSM: Ręce zakute w kajdanki z przodu i spięte z obrożą.",
+        "Modyfikator BDSM: Pełne unieruchomienie – ręce zakute z tyłu, kostki spięte ciasnym pasem.",
+        "Modyfikator BDSM: Ręce zakute w sztywne kajdanki (posture cuffs) z tyłu na wysokości lędźwi.",
+        "Modyfikator BDSM: Całkowity gag/knebel w ustach przez całe zadanie.",
+        "Modyfikator BDSM: Ciasne opasanie twarzy i ust szalem oraz ręce zakute za plecami.",
+        "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold) oraz ręce zakute w kajdanki.",
+        "Modyfikator BDSM: Nogi złączone i ciasno zespawane/skute w kolanach i kostkach.",
+        "Modyfikator BDSM: Ręce unieruchomione kajdankami wokół talii.",
+        "Modyfikator Estetyczny: Pomaluj paznokcie u rąk i stóp na głęboki czerwony kolor.",
+        "Modyfikator Postawy: Obowiązkowa obroża posture collar oraz kajdanki na nadgarstkach z tyłu.",
+        "Modyfikator Milczenia: Bezgłośność – każdy jęk nakłada +15 klapsów, usta skneblowane.",
+        "Modyfikator BDSM: Kajdanki na ręce połączone łańcuchem z kajdankami na nogach.",
+        "Modyfikator Rygoru: Liczenie każdego uderzenia na głos z kneblem w ustach.",
+        "Modyfikator BDSM: Ręce zakute z tyłu nad łokciami, uniemożliwiające jakikolwiek ruch ramion.",
+        "Modyfikator Postawy: Zakaz opierania się i siadania, nogi spięte na szerokość 10 cm.",
+        "Modyfikator Sensoryczny: Owinięcie głowy 3 szalami, opaska na oczach i ręce zakute na plecach.",
+        "Modyfikator BDSM: Skute kostki i wymuszone poruszanie się wyłącznie malutkim kroczkiem.",
+        "Modyfikator BDSM: Dłonie zakute w rękawice bez palców spięte razem z tyłu."
+      ];
+
+      function getRandomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function buildTaskText(category, i) {
+        const br = bras[i % bras.length];
+        const pan = panties[i % panties.length];
+        const low = lowerLayers[i % lowerLayers.length];
+        const dr = dresses[i % dresses.length];
+        const col = collars[i % collars.length];
+        const sc = scarfCounts[i % scarfCounts.length];
+        const clamp = clampsTypes[i % clampsTypes.length];
+        const tool = spankingTools[i % spankingTools.length];
+        const ex = exerciseTypes[i % exerciseTypes.length];
+
+        const hasClaps = (i % 2 === 0);
+        const hasCuffs = (i % 3 === 0 || i % 5 === 0);
+
+        let text = "";
+        let cuffText = hasCuffs ? " Ręce zakute w kajdanki na plecach, kostki spięte paskiem." : "";
+
+        if (category === "feminizacja") {
+          text = "Załóż " + br + ", " + pan + ", " + low + " oraz " + dr + ". Obroża: " + col + ", dodatek: " + sc + ", zamocuj na piersiach: " + clamp + "." + cuffText + " Wykonaj serię eleganckich ukłonów przed lustrem.";
+        } else if (category === "sensoryka") {
+          text = "Ubrana w " + br + ", " + pan + ", " + low + ", " + dr + ", obrożę: " + col + ", " + sc + ", opaskę na oczy (blindfold) oraz " + clamp + "." + cuffText + " Wytrzymaj w całkowitym bezruchu na krześle.";
+        } else if (category === "postawa") {
+          text = "Ubrana w " + br + ", " + pan + ", " + low + ", " + dr + ", obrożę: " + col + ", " + sc + " i szpilki, zamocuj na piersiach: " + clamp + "." + cuffText + " Wykonaj wyzwanie: " + ex + ".";
+        } else if (category === "sluzbalczosc") {
+          text = "Ubrana w " + br + ", " + pan + ", " + low + ", " + dr + ", obrożę: " + col + ", " + sc + " i " + clamp + "." + cuffText + " Wykonaj dokładne polerowanie obuwia lub czyszczenie na kolanach.";
+        }
+
+        if (hasClaps) {
+          text += " Na zakończenie wymierz sobie {{CLAPS_PLACEHOLDER}} klapsów narzędziem: " + tool + ".";
+        }
+
+        return { category: category, text: text, hasClaps: hasClaps, baseClaps: clapCounts[i % clapCounts.length] };
+      }
+
+      const tasks = [];
+      for (let i = 0; i < 25; i++) {
+        tasks.push(buildTaskText("feminizacja", i));
+        tasks.push(buildTaskText("sensoryka", i));
+        tasks.push(buildTaskText("postawa", i));
+        tasks.push(buildTaskText("sluzbalczosc", i));
+      }
+
+      document.getElementById("spinBtn").onclick = function() {
+        const cat = document.getElementById("categorySelect").value;
+        const filtered = cat === "ALL" ? tasks : tasks.filter(function(t) { return t.category === cat; });
+        const task = getRandomItem(filtered);
+
+        const isExtreme = document.getElementById("extremeRigor").checked;
+        const claps = isExtreme ? task.baseClaps * 3 : task.baseClaps;
+
+        let finalText = task.text;
+        if (task.hasClaps) {
+          finalText = finalText.replace("{{CLAPS_PLACEHOLDER}}", claps);
+        }
+
+        document.getElementById("resCategory").innerText = "Wylosowane Zadanie nr " + (completedTasksCount + 1) + " (" + task.category.toUpperCase() + ")";
+        document.getElementById("resText").innerText = finalText;
+        document.getElementById("modifierDisplay").innerText = getRandomItem(modifiers);
+
+        completedTasksCount++;
+        updateSessionDisplay();
+      };
+
+      document.getElementById("drawPenaltyBtn").onclick = function() {
+        let severityTitle = "";
+        let penaltyDesc = "";
+
+        if (completedTasksCount === 0) {
+          severityTitle = "🚨 MAKSYMALNA KARA (Porażka przed pierwszym zadaniem!)";
+          penaltyDesc = "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów ogonem szczura w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.";
+        } else if (completedTasksCount === 1) {
+          severityTitle = "⚡ SUPER SUROWA KARA (Mnożnik 5x)";
+          penaltyDesc = "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów czarną packą ze skutymi rękami za plecami.";
+        } else if (completedTasksCount >= 2 && completedTasksCount <= 3) {
+          severityTitle = "⚠️ SUROWA KARA (Mnożnik 4x)";
+          penaltyDesc = "Przerwano po " + completedTasksCount + " zadaniach. Kara 4x: 90 klapsów różową packą w pełnym unieruchomieniu.";
+        } else if (completedTasksCount >= 4 && completedTasksCount <= 6) {
+          severityTitle = "⚖️ STANDARDOWA KARA (Mnożnik 3x - 2x)";
+          penaltyDesc = "Przerwano po " + completedTasksCount + " zadaniach. Kara umiarkowana: 50 klapsów pasem i 5 minut stania w kącie.";
+        } else if (completedTasksCount >= 7 && completedTasksCount <= 9) {
+          severityTitle = "🍃 ŁAGODNA KARA (Mnożnik 1x)";
+          penaltyDesc = "Dotarłaś bardzo daleko (" + completedTasksCount + " zadań)! Łagodna korekta: tylko 15 delikatnych klapsów dłonią.";
+        } else {
+          severityTitle = "👑 BRAK KARY (Ukończono 10+ zadań!)";
+          penaltyDesc = "Wykonałaś już " + completedTasksCount + " zadań! Twój rygor został w pełni zaliczony – brak jakiejkolwiek kary. Jesteś wolna lub możesz kontynuować sesję!";
+        }
+
+        document.getElementById("resCategory").innerText = severityTitle;
+        document.getElementById("resText").innerText = penaltyDesc;
+        document.getElementById("modifierDisplay").innerText = "Poziom sesji został zresetowany.";
+        
+        completedTasksCount = 0;
+        updateSessionDisplay();
+      };
+
+      document.getElementById("resetSessionBtn").onclick = function() {
+        completedTasksCount = 0;
+        updateSessionDisplay();
+        document.getElementById("resCategory").innerText = "SESJA ZRESETOWANA";
+        document.getElementById("resText").innerText = "Licznik wyczyszczony. Rozpoczynasz od zadania nr 1.";
+        document.getElementById("modifierDisplay").innerText = "";
+      };
+
+      document.getElementById("generateOutfitBtn").onclick = function() {
+        document.getElementById("outfitBox").innerHTML = 
+          "<li><strong>Obroża:</strong> " + getRandomItem(collars) + "</li>" +
+          "<li><strong>Góra (Bielizna):</strong> " + getRandomItem(bras) + "</li>" +
+          "<li><strong>Dół (Bielizna):</strong> " + getRandomItem(panties) + "</li>" +
+          "<li><strong>Nogi:</strong> " + getRandomItem(lowerLayers) + "</li>" +
+          "<li><strong>Główny Strój:</strong> " + getRandomItem(dresses) + "</li>" +
+          "<li><strong>Szaliki:</strong> " + getRandomItem(scarfCounts) + "</li>" +
+          "<li><strong>Zaciski/Klamry:</strong> " + getRandomItem(clampsTypes) + "</li>" +
+          "<li><strong>Narzędzie do klapsów:</strong> " + getRandomItem(spankingTools) + "</li>";
+      };
+
+      let timer = 900;
+      let interval = null;
+      const display = document.getElementById("timerDisplay");
+
+      document.getElementById("startTimer").onclick = function() {
+        if (interval) return;
+        interval = setInterval(function() {
+          if (timer > 0) {
+            timer--;
+            let m = Math.floor(timer / 60).toString();
+            let s = (timer % 60).toString();
+            if (m.length < 2) m = "0" + m;
+            if (s.length < 2) s = "0" + s;
+            display.innerText = m + ":" + s;
+          } else {
+            clearInterval(interval);
+            interval = null;
+            alert("Czas zadania minął!");
+          }
+        }, 1000);
+      };
+
+      document.getElementById("resetTimer").onclick = function() {
+        clearInterval(interval);
+        interval = null;
+        timer = 900;
+        display.innerText = "15:00";
+      };
+    });
+  </script>
+
+</body>
+</html>
