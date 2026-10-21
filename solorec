@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Zadań, Kar i Rygoru Solo</title>
+  <style>
+    body {
+      background-color: #0a060d;
+      color: #f3e9f5;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 { color: #e02585; text-transform: uppercase; font-size: 1.5rem; text-align: center; }
+    .container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; }
+    .card { background: #1a0f1f; border: 1px solid #b45096; border-radius: 8px; padding: 15px; }
+    .btn { width: 100%; padding: 12px; background: #8b12a8; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 5px; text-transform: uppercase; }
+    .btn:hover { background: #e02585; }
+    .btn-danger { background: #d92525; }
+    select, input { width: 100%; padding: 8px; margin-top: 5px; background: #0a060d; color: #fff; border: 1px solid #b45096; border-radius: 4px; }
+    .result-box { background: #0a060d; border: 1px dashed #e02585; padding: 15px; border-radius: 6px; margin-top: 10px; min-height: 80px; text-align: center; }
+    .timer { font-size: 1.8rem; color: #dfb256; text-align: center; font-family: monospace; margin: 10px 0; }
+    .session-badge { background: #8b12a8; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; display: inline-block; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <h1>Generator Zadań, Kar i Rygoru Solo</h1>
+
+  <div class="container">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="session-badge" id="sessionCounter">Ukończone zadania w sesji: 0 (Następne: nr 1)</span>
+        <button class="btn" style="width:auto; padding:6px 12px; margin:0; background:#555; font-size:0.75rem;" id="resetSessionBtn">Reset Sesji</button>
+      </div>
+
+      <label>Kategoria Wyzwania:</label>
+      <select id="categorySelect">
+        <option value="ALL">Wszystkie Kategorie</option>
+        <option value="feminizacja">Sukienki i Feminizacja</option>
+        <option value="sensoryka">Sensoryka i Bezruch</option>
+        <option value="postawa">Postawa i Szpilki</option>
+        <option value="sluzbalczosc">Służalczość i Porządki</option>
+      </select>
+
+      <label style="display:block; margin-top:10px; color:#ff8080;">
+        <input type="checkbox" id="extremeRigor"> Tryb "Bezwzględny Rygor" (Liczba klapsów x3)
+      </label>
+
+      <button class="btn" id="spinBtn" style="margin-top:15px;">Wylosuj Zadanie</button>
+      <button class="btn btn-danger" id="drawPenaltyBtn">Poddaj się / Kara za Błąd</button>
+      <button class="btn" style="background:#dfb256; color:#000;" id="generateOutfitBtn">Wygeneruj Strój</button>
+    </div>
+
+    <div class="card">
+      <h3>Wynik Losowania:</h3>
+      <div class="result-box">
+        <div id="resCategory" style="color: #dfb256; font-size: 0.8rem; text-transform: uppercase;">Gotowy</div>
+        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Kliknij przycisk powyżej, aby rozpocząć.</div>
+        <div id="modifierDisplay" style="color: #e02585; margin-top: 10px; font-size: 0.85rem; font-weight: bold;"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Stoper Odliczający</h3>
+      <div class="timer" id="timerDisplay">15:00</div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn" id="startTimer">Start</button>
+        <button class="btn" style="background:#555;" id="resetTimer">Reset</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Wylosowany Strój:</h3>
+      <ul id="outfitBox" style="font-size: 0.9rem; padding-left: 20px; line-height: 1.6;">
+        <li>Brak wygenerowanego stroju.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      let completedTasksCount = 0;
+
+      function updateSessionDisplay() {
+        document.getElementById("sessionCounter").innerText = `Ukończone zadania w sesji: ${completedTasksCount} (Następne: nr ${completedTasksCount + 1})`;
+      }
+
+      const clapCounts = [10, 15, 20, 25, 30, 40, 50, 75, 100];
+
+      const spankingTools = [
+        "czarna packa", "różowa packa", "ogon szczura", "dłoń", "szeroki skórzany pas",
+        "wąski skórzany pasek", "paletka drewniana", "wylepiany pejczer", "whip/pejcz rzemienny",
+        "skórzana klapsówka z frędzlami", "paletka z otworami powietrznymi", "ciężka paczka z uchwytem",
+        "gumowa paletka treningowa", "płaska paczka skórzana", "sztywna paczka welurowa",
+        "zgięty pasek parciany", "dłoń w skórzanej rękawiczce", "podwójna paczka lakierowana",
+        "podłużny pasek z klamrą", "zbieżna miotełka skórzana"
+      ];
+
+      const collars = [
+        "posture collar", "standard collar", "brak obroży", "wysoka obroża usztywniająca z ringiem",
+        "szeroka obroża skórzana z klamrą", "obroża z metalowym kółkiem z przodu", "obroża z miękkim wyściełaniem",
+        "obroża lakierowana czarna", "obroża różowa z ćwiekami", "obroża z miejscem na smycz",
+        "obroża z dołączonym gagem", "obroża usztywniana z zamkiem", "obroża ciasno dopasowana z paskiem",
+        "obroża z uszkami bocznymi", "obroża z podwójną klamrą", "obroża z łańcuszkiem dekoracyjnym",
+        "obroża aksamitna z pierścieniem", "obroża skórzana ze sprzączką z tyłu", "obroża usztywniana do brody", "obroża z dzwoneczkiem"
+      ];
+
+      const bras = [
+        "sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "brak biustonosza",
+        "biustonosz usztywniany z fiszbinami", "biustonosz miękki bez fiszbin", "biustonosz bawełniany",
+        "biustonosz gładki czarny", "biustonosz z paskami na dekolcie", "biustonosz koronkowy bralette",
+        "biustonosz usztywniany typu balconette", "biustonosz czerwony satynowy", "biustonosz z głębokim wycięciem",
+        "biustonosz bez ramiączek", "biustonosz zapinany z przodu", "biustonosz półprzezroczysty",
+        "biustonosz gorsetowy krótki", "biustonosz modelujący", "biustonosz sportowy z szeroką gumą", "biustonosz bezszwowy"
+      ];
+
+      const panties = [
+        "ciasne stringi", "figi", "brak majtek", "stringi koronkowe z wysokim stanem",
+        "figi bezszwowe", "stringi z paskami na biodrach", "figi kryjące bawełniane",
+        "stringi satynowe", "figi brazyliany", "stringi bezszwowe", "figi z wysokim stanem modelujące",
+        "stringi z rozcięciem", "figi z prześwitującą siateczką", "stringi różowe koronkowe",
+        "figi mocno wycięte", "stringi bawełniane", "figi satynowe z kokardką", "stringi z biżuteryjnym kółkiem",
+        "figi koronkowe czerwone", "stringi z gumką w talii"
+      ];
+
+      const scarfCounts = [
+        "bez szalika", "1 szalik", "2 szaliki", "3 szaliki", "4 szaliki naraz",
+        "1 ciężki szal blanket scarf", "2 grube szale owinięte ciasno", "1 komin dzianinowy",
+        "2 kominy dzianinowe nakładane na siebie", "1 chusta w kratę", "2 chusty spięte na szyi",
+        "3 szale owinięte wokół twarzy", "1 długa dzianinowa chusta", "2 szale acryliki z frędzlami",
+        "1 duży szal kaszmirowy", "3 szale unieruchamiające szyję", "4 szale owinięte po głowę",
+        "1 szal szczelnie zakrywający usta", "2 szale spięte pasem", "3 ciężkie szale dzianinowe"
+      ];
+
+      const lowerLayers = [
+        "grube czarne rajstopy (100D)", "prześwitujące czarne rajstopy", "dopasowane elastyczne legginsy",
+        "rajstopy ze szwem z tyłu", "rajstopy kryjące 80D", "rajstopy błyszczące wieczorowe",
+        "kabaretki o drobnym oczku", "kabaretki o dużym oczku", "legginsy zamszowe",
+        "rajstopy w drobne kropki", "rajstopy bezpalcowe", "rajstopy ze szwem i wzorem",
+        "rajstopy wzorzyste geometryczne", "legginsy błyszczące", "rajstopy kryjące cieliste",
+        "rajstopy modelujące pośladki", "kabaretki założone na gładkie rajstopy", "rajstopy matowe 60D",
+        "legginsy z wysokim stanem", "rajstopy czarne z połyskiem"
+      ];
+
+      const dresses = [
+        "sukienkę bodycon", "sukienkę maxi", "rozkloszowaną spódnicę i bluzkę", "ołówkową spódnicę",
+        "kwiatową sukienkę", "małą czarną", "sukienkę midi", "dzianinową sukienkę",
+        "czerwoną sukienkę bodycon", "plisowaną spódnicę maxi", "skórzaną spódnicę ołówkową",
+        "satynową sukienkę slip dress", "sukienkę kopertową z wiązaniem", "sukienkę z głębokim dekoltem",
+        "elegancki komplet ze spódnicą", "sukienkę w kratkę", "sukienkę z golfem dopasowaną",
+        "spódnicę tiulową z topem", "sukienkę z rozcięciem na udzie", "sukienkę aksamitną"
+      ];
+
+      const clampsTypes = [
+        "clover clamps", "spinacze z ciężarkami", "metalowe zaciski klamrowe", "zaciski klamrowe z dzwoneczkami",
+        "ciężkie zaciski śrubowe", "klamry sutkowe na łańcuszku", "zaciski z miękką osłonką",
+        "regulowane klamry sprężynowe", "małe klamerki zaciskowe", "zaciski z ozdobnymi piórkami",
+        "klamry z lekkim obciążeniem", "metalowe klipsy zaciskowe", "zaciski klamrowe połączone łańcuszkiem",
+        "klamry śrubowe z regulacją nacisku", "zaciski z silikonową podkładką", "małe spinacze z odważnikami",
+        "klipsy zaciskowe do intensywnej stymulacji", "klamry sprężynowe z dzwonkami", "zaciski rurkowe", "ciężkie klamry metalowe"
+      ];
+
+      const exerciseTypes = [
+        "chodzenie w szpilkach po prostej linii z książką na głowie",
+        "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
+        "trzymanie głębokiego przysiadu w szpilkach i sukience",
+        "wykonanie powolnych zakroków z zachowaniem idealnej postawy",
+        "poruszanie się na kolanach ze skrzyżowanymi kostkami z tyłu",
+        "chodzenie na palcach w szpilkach z rękami skutymi na plecach",
+        "utrzymanie pozycji 'jaskółki' (balans na jednej nodze) w szpilkach przez 2 minuty",
+        "chodzenie ze skrępowanymi kostkami ciasnym krokiem po pokoju",
+        "utrzymanie półprzysiadu przy ścianie z obcasami uniesionymi w górę",
+        "wykonanie 20 ukłonów przed lustrem ze skutymi dłońmi z przodu",
+        "stanie w pełnym wyproście ze złączonymi piętami i kajdankami na rękach przez 5 minut",
+        "klęczenie na twardej podłodze ze skutymi dłońmi za plecami i prostym kręgosłupem",
+        "chodzenie powolnym krokiem z rękami skutymi do pas/obroży",
+        "wykonanie 15 powolnych przysiadów ze skutymi kostkami",
+        "chodzenie tyłem po wyznaczonej prostej linii na obcasach",
+        "utrzymanie pozycji kucającej na palcach z kajdankami na nadgarstkach",
+        "chodzenie na kolanach ze skutymi nadgarstkami z tyłu i skrzyżowanymi nogami",
+        "utrzymanie nieruchomej pozycji uległej na kolanach z rękami z tyłu",
+        "wykonanie serii zakroków w miejscu ze skutymi rękami na plecach",
+        "powolne wznosy na palcach stóp w szpilkach z dłońmi spiętymi z tyłu"
+      ];
+
+      const modifiers = [
+        "Modyfikator BDSM: Ręce zakute w skórzane/metalowe kajdanki za plecami na całe zadanie.",
+        "Modyfikator BDSM: Nogi skute w kajdanki na kostkach (uniemożliwiające szerokie kroki).",
+        "Modyfikator BDSM: Ręce zakute w kajdanki z przodu i spięte z obrożą.",
+        "Modyfikator BDSM: Pełne unieruchomienie – ręce zakute z tyłu, kostki spięte ciasnym pasem.",
+        "Modyfikator BDSM: Ręce zakute w sztywne kajdanki (posture cuffs) z tyłu na wysokości lędźwi.",
+        "Modyfikator BDSM: Całkowity gag/knebel w ustach przez całe zadanie.",
+        "Modyfikator BDSM: Ciasne opasanie twarzy i ust szalem oraz ręce zakute za plecami.",
+        "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold) oraz ręce zakute w kajdanki.",
+        "Modyfikator BDSM: Nogi złączone i ciasno zespawane/skute w kolanach i kostkach.",
+        "Modyfikator BDSM: Ręce unieruchomione kajdankami wokół talii.",
+        "Modyfikator Estetyczny: Pomaluj paznokcie u rąk i stóp na głęboki czerwony kolor.",
+        "Modyfikator Postawy: Obowiązkowa obroża posture collar oraz kajdanki na nadgarstkach z tyłu.",
+        "Modyfikator Milczenia: Bezgłośność – każdy jęk nakłada +15 klapsów, usta skneblowane.",
+        "Modyfikator BDSM: Kajdanki na ręce połączone łańcuchem z kajdankami na nogach.",
+        "Modyfikator Rygoru: Liczenie każdego uderzenia na głos z kneblem w ustach.",
+        "Modyfikator BDSM: Ręce zakute z tyłu nad łokciami, uniemożliwiające jakikolwiek ruch ramion.",
+        "Modyfikator Postawy: Zakaz opierania się i siadania, nogi spięte na szerokość 10 cm.",
+        "Modyfikator Sensoryczny: Owinięcie głowy 3 szalami, opaska na oczach i ręce zakute na plecach.",
+        "Modyfikator BDSM: Skute kostki i wymuszone poruszanie się wyłącznie malutkim kroczkiem.",
+        "Modyfikator BDSM: Dłonie zakute w rękawice bez palców spięte razem z tyłu."
+      ];
+
+      function buildTaskText(category, i) {
+        const br = bras[i % bras.length];
+        const pan = panties[i % panties.length];
+        const low = lowerLayers[i % lowerLayers.length];
+        const dr = dresses[i % dresses.length];
+        const col = collars[i % collars.length];
+        const sc = scarfCounts[i % scarfCounts.length];
+        const clamp = clampsTypes[i % clampsTypes.length];
+        const tool = spankingTools[i % spankingTools.length];
+        const ex = exerciseTypes[i % exerciseTypes.length];
+
+        const hasClaps = (i % 2 === 0);
+        const hasCuffs = (i % 3 === 0 || i % 5 === 0);
+
+        let text = "";
+        let cuffText = hasCuffs ? " Ręce zakute w kajdanki na plecach, kostki spięte paskiem." : "";
+
+        if (category === "feminizacja") {
+          text = `Załóż ${br},${pan}, ${low} oraz${dr}. Obroża: ${col}, dodatek:${sc}, zamocuj na piersiach: ${clamp}.${
