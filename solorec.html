@@ -5,26 +5,148 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generator Zadań, Kar i Rygoru Solo</title>
   <style>
+    :root {
+      --bg-main: #0a060d;
+      --bg-card: #1a0f1f;
+      --border-card: #b45096;
+      --accent-magenta: #e02585;
+      --accent-purple: #8b12a8;
+      --accent-gold: #dfb256;
+      --accent-red: #d92525;
+      --text-main: #f3e9f5;
+      --text-muted: #a692ab;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background-color: #0a060d;
-      color: #f3e9f5;
+      background-color: var(--bg-main);
+      color: var(--text-main);
       font-family: Arial, sans-serif;
-      margin: 0;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
-    h1 { color: #e02585; text-transform: uppercase; font-size: 1.5rem; text-align: center; }
-    .container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 15px; }
-    .card { background: #1a0f1f; border: 1px solid #b45096; border-radius: 8px; padding: 15px; }
-    .btn { width: 100%; padding: 12px; background: #8b12a8; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 5px; text-transform: uppercase; }
-    .btn:hover { background: #e02585; }
-    .btn-danger { background: #d92525; }
-    select, input { width: 100%; padding: 8px; margin-top: 5px; background: #0a060d; color: #fff; border: 1px solid #b45096; border-radius: 4px; }
-    .result-box { background: #0a060d; border: 1px dashed #e02585; padding: 15px; border-radius: 6px; margin-top: 10px; min-height: 80px; text-align: center; }
-    .timer { font-size: 1.8rem; color: #dfb256; text-align: center; font-family: monospace; margin: 10px 0; }
-    .session-badge { background: #8b12a8; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; display: inline-block; margin-bottom: 8px; }
+
+    h1 {
+      color: var(--accent-magenta);
+      text-transform: uppercase;
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .card h3 {
+      color: var(--accent-gold);
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(180, 80, 150, 0.3);
+      padding-bottom: 5px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-purple);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover { background: var(--accent-magenta); }
+    .btn-danger { background: var(--accent-red); }
+    .btn-danger:hover { background: #b01c1c; }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      background: #0a060d;
+      color: #fff;
+      border: 1px solid var(--border-card);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: #ff8080;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .result-box {
+      background: #0a060d;
+      border: 1px dashed var(--accent-magenta);
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      min-height: 90px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .timer {
+      font-size: 2.2rem;
+      color: var(--accent-gold);
+      text-align: center;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+
+    .session-badge {
+      background: var(--accent-purple);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    ul.outfit-list {
+      font-size: 0.9rem;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -33,12 +155,12 @@
 
   <div class="container">
     <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <div class="flex-between">
         <span class="session-badge" id="sessionCounter">Ukończone zadania: 0 (Następne: nr 1)</span>
         <button class="btn" style="width:auto; padding:6px 12px; margin:0; background:#555; font-size:0.75rem;" id="resetSessionBtn">Reset Sesji</button>
       </div>
 
-      <label for="categorySelect">Kategoria Wyzwania:</label>
+      <label for="categorySelect" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Kategoria Wyzwania:</label>
       <select id="categorySelect">
         <option value="ALL">Wszystkie Kategorie</option>
         <option value="feminizacja">Sukienki i Feminizacja</option>
@@ -47,21 +169,21 @@
         <option value="sluzbalczosc">Służalczość i Porządki</option>
       </select>
 
-      <label style="display:block; margin-top:10px; color:#ff8080;">
+      <label class="checkbox-label">
         <input type="checkbox" id="extremeRigor"> Tryb "Bezwzględny Rygor" (Liczba klapsów x3)
       </label>
 
       <button class="btn" id="spinBtn" style="margin-top:15px;">Wylosuj Zadanie</button>
       <button class="btn btn-danger" id="drawPenaltyBtn">Poddaj się / Kara za Błąd</button>
-      <button class="btn" style="background:#dfb256; color:#000;" id="generateOutfitBtn">Wygeneruj Strój</button>
+      <button class="btn" style="background:var(--accent-gold); color:#000;" id="generateOutfitBtn">Wygeneruj Strój</button>
     </div>
 
     <div class="card">
       <h3>Wynik Losowania:</h3>
       <div class="result-box">
-        <div id="resCategory" style="color: #dfb256; font-size: 0.8rem; text-transform: uppercase;">Gotowy</div>
+        <div id="resCategory" style="color: var(--accent-gold); font-size: 0.85rem; text-transform: uppercase; font-weight: bold;">Gotowy</div>
         <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Kliknij przycisk powyżej, aby rozpocząć.</div>
-        <div id="modifierDisplay" style="color: #e02585; margin-top: 10px; font-size: 0.85rem; font-weight: bold;"></div>
+        <div id="modifierDisplay" style="color: var(--accent-magenta); margin-top: 10px; font-size: 0.9rem; font-weight: bold;"></div>
       </div>
     </div>
 
@@ -76,26 +198,19 @@
 
     <div class="card">
       <h3>Wylosowany Strój:</h3>
-      <ul id="outfitBox" style="font-size: 0.9rem; padding-left: 20px; line-height: 1.6;">
+      <ul class="outfit-list" id="outfitBox">
         <li>Brak wygenerowanego stroju.</li>
       </ul>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      let completedTasksCount = 0;
+    (function() {
+      var completedTasksCount = 0;
 
-      function updateSessionDisplay() {
-        const counterEl = document.getElementById("sessionCounter");
-        if (counterEl) {
-          counterEl.innerText = "Ukończone zadania: " + completedTasksCount + " (Następne: nr " + (completedTasksCount + 1) + ")";
-        }
-      }
+      var clapCounts = [10, 15, 20, 25, 30, 40, 50, 75, 100];
 
-      const clapCounts = [10, 15, 20, 25, 30, 40, 50, 75, 100];
-
-      const spankingTools = [
+      var spankingTools = [
         "czarna packa", "różowa packa", "ogon szczura", "dłoń", "szeroki skórzany pas",
         "wąski skórzany pasek", "paletka drewniana", "wylepiany pejczer", "whip/pejcz rzemienny",
         "skórzana klapsówka z frędzlami", "paletka z otworami powietrznymi", "ciężka paczka z uchwytem",
@@ -104,7 +219,7 @@
         "podłużny pasek z klamrą", "zbieżna miotełka skórzana"
       ];
 
-      const collars = [
+      var collars = [
         "posture collar", "standard collar", "brak obroży", "wysoka obroża usztywniająca z ringiem",
         "szeroka obroża skórzana z klamrą", "obroża z metalowym kółkiem z przodu", "obroża z miękkim wyściełaniem",
         "obroża lakierowana czarna", "obroża różowa z ćwiekami", "obroża z miejscem na smycz",
@@ -113,7 +228,7 @@
         "obroża aksamitna z pierścieniem", "obroża skórzana ze sprzączką z tyłu", "obroża usztywniana do brody", "obroża z dzwoneczkiem"
       ];
 
-      const bras = [
+      var bras = [
         "sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "brak biustonosza",
         "biustonosz usztywniany z fiszbinami", "biustonosz miękki bez fiszbin", "biustonosz bawełniany",
         "biustonosz gładki czarny", "biustonosz z paskami na dekolcie", "biustonosz koronkowy bralette",
@@ -122,7 +237,7 @@
         "biustonosz gorsetowy krótki", "biustonosz modelujący", "biustonosz sportowy z szeroką gumą", "biustonosz bezszwowy"
       ];
 
-      const panties = [
+      var panties = [
         "ciasne stringi", "figi", "brak majtek", "stringi koronkowe z wysokim stanem",
         "figi bezszwowe", "stringi z paskami na biodrach", "figi kryjące bawełniane",
         "stringi satynowe", "figi brazyliany", "stringi bezszwowe", "figi z wysokim stanem modelujące",
@@ -131,7 +246,7 @@
         "figi koronkowe czerwone", "stringi z gumką w talii"
       ];
 
-      const scarfCounts = [
+      var scarfCounts = [
         "bez szalika", "1 szalik", "2 szaliki", "3 szaliki", "4 szaliki naraz",
         "1 ciężki szal blanket scarf", "2 grube szale owinięte ciasno", "1 komin dzianinowy",
         "2 kominy dzianinowe nakładane na siebie", "1 chusta w kratę", "2 chusty spięte na szyi",
@@ -140,7 +255,7 @@
         "1 szal szczelnie zakrywający usta", "2 szale spięte pasem", "3 ciężkie szale dzianinowe"
       ];
 
-      const lowerLayers = [
+      var lowerLayers = [
         "grube czarne rajstopy (100D)", "prześwitujące czarne rajstopy", "dopasowane elastyczne legginsy",
         "rajstopy ze szwem z tyłu", "rajstopy kryjące 80D", "rajstopy błyszczące wieczorowe",
         "kabaretki o drobnym oczku", "kabaretki o dużym oczku", "legginsy zamszowe",
@@ -150,7 +265,7 @@
         "legginsy z wysokim stanem", "rajstopy czarne z połyskiem"
       ];
 
-      const dresses = [
+      var dresses = [
         "sukienkę bodycon", "sukienkę maxi", "rozkloszowaną spódnicę i bluzkę", "ołówkową spódnicę",
         "kwiatową sukienkę", "małą czarną", "sukienkę midi", "dzianinową sukienkę",
         "czerwoną sukienkę bodycon", "plisowaną spódnicę maxi", "skórzaną spódnicę ołówkową",
@@ -159,7 +274,7 @@
         "spódnicę tiulową z topem", "sukienkę z rozcięciem na udzie", "sukienkę aksamitną"
       ];
 
-      const clampsTypes = [
+      var clampsTypes = [
         "clover clamps", "spinacze z ciężarkami", "metalowe zaciski klamrowe", "zaciski klamrowe z dzwoneczkami",
         "ciężkie zaciski śrubowe", "klamry sutkowe na łańcuszku", "zaciski z miękką osłonką",
         "regulowane klamry sprężynowe", "małe klamerki zaciskowe", "zaciski z ozdobnymi piórkami",
@@ -168,7 +283,7 @@
         "klipsy zaciskowe do intensywnej stymulacji", "klamry sprężynowe z dzwonkami", "zaciski rurkowe", "ciężkie klamry metalowe"
       ];
 
-      const exerciseTypes = [
+      var exerciseTypes = [
         "chodzenie w szpilkach po prostej linii z książką na głowie",
         "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
         "trzymanie głębokiego przysiadu w szpilkach i sukience",
@@ -191,7 +306,7 @@
         "powolne wznosy na palcach stóp w szpilkach z dłońmi spiętymi z tyłu"
       ];
 
-      const modifiers = [
+      var modifiers = [
         "Modyfikator BDSM: Ręce zakute w skórzane/metalowe kajdanki za plecami na całe zadanie.",
         "Modyfikator BDSM: Nogi skute w kajdanki na kostkach (uniemożliwiające szerokie kroki).",
         "Modyfikator BDSM: Ręce zakute w kajdanki z przodu i spięte z obrożą.",
@@ -214,26 +329,33 @@
         "Modyfikator BDSM: Dłonie zakute w rękawice bez palców spięte razem z tyłu."
       ];
 
-      function getRandomItem(arr) {
+      function getRandom(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
       }
 
-      function buildTaskText(category, i) {
-        const br = bras[i % bras.length];
-        const pan = panties[i % panties.length];
-        const low = lowerLayers[i % lowerLayers.length];
-        const dr = dresses[i % dresses.length];
-        const col = collars[i % collars.length];
-        const sc = scarfCounts[i % scarfCounts.length];
-        const clamp = clampsTypes[i % clampsTypes.length];
-        const tool = spankingTools[i % spankingTools.length];
-        const ex = exerciseTypes[i % exerciseTypes.length];
+      function updateSessionDisplay() {
+        var el = document.getElementById("sessionCounter");
+        if (el) {
+          el.innerText = "Ukończone zadania: " + completedTasksCount + " (Następne: nr " + (completedTasksCount + 1) + ")";
+        }
+      }
 
-        const hasClaps = (i % 2 === 0);
-        const hasCuffs = (i % 3 === 0 || i % 5 === 0);
+      function buildTask(category, i) {
+        var br = bras[i % bras.length];
+        var pan = panties[i % panties.length];
+        var low = lowerLayers[i % lowerLayers.length];
+        var dr = dresses[i % dresses.length];
+        var col = collars[i % collars.length];
+        var sc = scarfCounts[i % scarfCounts.length];
+        var clamp = clampsTypes[i % clampsTypes.length];
+        var tool = spankingTools[i % spankingTools.length];
+        var ex = exerciseTypes[i % exerciseTypes.length];
 
-        let text = "";
-        let cuffText = hasCuffs ? " Ręce zakute w kajdanki na plecach, kostki spięte paskiem." : "";
+        var hasClaps = (i % 2 === 0);
+        var hasCuffs = (i % 3 === 0 || i % 5 === 0);
+
+        var text = "";
+        var cuffText = hasCuffs ? " Ręce zakute w kajdanki na plecach, kostki spięte paskiem." : "";
 
         if (category === "feminizacja") {
           text = "Załóż " + br + ", " + pan + ", " + low + " oraz " + dr + ". Obroża: " + col + ", dodatek: " + sc + ", zamocuj na piersiach: " + clamp + "." + cuffText + " Wykonaj serię eleganckich ukłonów przed lustrem.";
@@ -252,116 +374,126 @@
         return { category: category, text: text, hasClaps: hasClaps, baseClaps: clapCounts[i % clapCounts.length] };
       }
 
-      const tasks = [];
-      for (let i = 0; i < 25; i++) {
-        tasks.push(buildTaskText("feminizacja", i));
-        tasks.push(buildTaskText("sensoryka", i));
-        tasks.push(buildTaskText("postawa", i));
-        tasks.push(buildTaskText("sluzbalczosc", i));
+      var tasks = [];
+      for (var i = 0; i < 25; i++) {
+        tasks.push(buildTask("feminizacja", i));
+        tasks.push(buildTask("sensoryka", i));
+        tasks.push(buildTask("postawa", i));
+        tasks.push(buildTask("sluzbalczosc", i));
       }
 
-      document.getElementById("spinBtn").onclick = function() {
-        const cat = document.getElementById("categorySelect").value;
-        const filtered = cat === "ALL" ? tasks : tasks.filter(function(t) { return t.category === cat; });
-        const task = getRandomItem(filtered);
+      function initEvents() {
+        document.getElementById("spinBtn").onclick = function() {
+          var cat = document.getElementById("categorySelect").value;
+          var filtered = cat === "ALL" ? tasks : tasks.filter(function(t) { return t.category === cat; });
+          var task = getRandom(filtered);
 
-        const isExtreme = document.getElementById("extremeRigor").checked;
-        const claps = isExtreme ? task.baseClaps * 3 : task.baseClaps;
+          var isExtreme = document.getElementById("extremeRigor").checked;
+          var claps = isExtreme ? task.baseClaps * 3 : task.baseClaps;
 
-        let finalText = task.text;
-        if (task.hasClaps) {
-          finalText = finalText.replace("{{CLAPS_PLACEHOLDER}}", claps);
-        }
-
-        document.getElementById("resCategory").innerText = "Wylosowane Zadanie nr " + (completedTasksCount + 1) + " (" + task.category.toUpperCase() + ")";
-        document.getElementById("resText").innerText = finalText;
-        document.getElementById("modifierDisplay").innerText = getRandomItem(modifiers);
-
-        completedTasksCount++;
-        updateSessionDisplay();
-      };
-
-      document.getElementById("drawPenaltyBtn").onclick = function() {
-        let severityTitle = "";
-        let penaltyDesc = "";
-
-        if (completedTasksCount === 0) {
-          severityTitle = "🚨 MAKSYMALNA KARA (Porażka przed pierwszym zadaniem!)";
-          penaltyDesc = "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów ogonem szczura w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.";
-        } else if (completedTasksCount === 1) {
-          severityTitle = "⚡ SUPER SUROWA KARA (Mnożnik 5x)";
-          penaltyDesc = "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów czarną packą ze skutymi rękami za plecami.";
-        } else if (completedTasksCount >= 2 && completedTasksCount <= 3) {
-          severityTitle = "⚠️ SUROWA KARA (Mnożnik 4x)";
-          penaltyDesc = "Przerwano po " + completedTasksCount + " zadaniach. Kara 4x: 90 klapsów różową packą w pełnym unieruchomieniu.";
-        } else if (completedTasksCount >= 4 && completedTasksCount <= 6) {
-          severityTitle = "⚖️ STANDARDOWA KARA (Mnożnik 3x - 2x)";
-          penaltyDesc = "Przerwano po " + completedTasksCount + " zadaniach. Kara umiarkowana: 50 klapsów pasem i 5 minut stania w kącie.";
-        } else if (completedTasksCount >= 7 && completedTasksCount <= 9) {
-          severityTitle = "🍃 ŁAGODNA KARA (Mnożnik 1x)";
-          penaltyDesc = "Dotarłaś bardzo daleko (" + completedTasksCount + " zadań)! Łagodna korekta: tylko 15 delikatnych klapsów dłonią.";
-        } else {
-          severityTitle = "👑 BRAK KARY (Ukończono 10+ zadań!)";
-          penaltyDesc = "Wykonałaś już " + completedTasksCount + " zadań! Twój rygor został w pełni zaliczony – brak jakiejkolwiek kary. Jesteś wolna lub możesz kontynuować sesję!";
-        }
-
-        document.getElementById("resCategory").innerText = severityTitle;
-        document.getElementById("resText").innerText = penaltyDesc;
-        document.getElementById("modifierDisplay").innerText = "Poziom sesji został zresetowany.";
-        
-        completedTasksCount = 0;
-        updateSessionDisplay();
-      };
-
-      document.getElementById("resetSessionBtn").onclick = function() {
-        completedTasksCount = 0;
-        updateSessionDisplay();
-        document.getElementById("resCategory").innerText = "SESJA ZRESETOWANA";
-        document.getElementById("resText").innerText = "Licznik wyczyszczony. Rozpoczynasz od zadania nr 1.";
-        document.getElementById("modifierDisplay").innerText = "";
-      };
-
-      document.getElementById("generateOutfitBtn").onclick = function() {
-        document.getElementById("outfitBox").innerHTML = 
-          "<li><strong>Obroża:</strong> " + getRandomItem(collars) + "</li>" +
-          "<li><strong>Góra (Bielizna):</strong> " + getRandomItem(bras) + "</li>" +
-          "<li><strong>Dół (Bielizna):</strong> " + getRandomItem(panties) + "</li>" +
-          "<li><strong>Nogi:</strong> " + getRandomItem(lowerLayers) + "</li>" +
-          "<li><strong>Główny Strój:</strong> " + getRandomItem(dresses) + "</li>" +
-          "<li><strong>Szaliki:</strong> " + getRandomItem(scarfCounts) + "</li>" +
-          "<li><strong>Zaciski/Klamry:</strong> " + getRandomItem(clampsTypes) + "</li>" +
-          "<li><strong>Narzędzie do klapsów:</strong> " + getRandomItem(spankingTools) + "</li>";
-      };
-
-      let timer = 900;
-      let interval = null;
-      const display = document.getElementById("timerDisplay");
-
-      document.getElementById("startTimer").onclick = function() {
-        if (interval) return;
-        interval = setInterval(function() {
-          if (timer > 0) {
-            timer--;
-            let m = Math.floor(timer / 60).toString();
-            let s = (timer % 60).toString();
-            if (m.length < 2) m = "0" + m;
-            if (s.length < 2) s = "0" + s;
-            display.innerText = m + ":" + s;
-          } else {
-            clearInterval(interval);
-            interval = null;
-            alert("Czas zadania minął!");
+          var finalText = task.text;
+          if (task.hasClaps) {
+            finalText = finalText.replace("{{CLAPS_PLACEHOLDER}}", claps);
           }
-        }, 1000);
-      };
 
-      document.getElementById("resetTimer").onclick = function() {
-        clearInterval(interval);
-        interval = null;
-        timer = 900;
-        display.innerText = "15:00";
-      };
-    });
+          document.getElementById("resCategory").innerText = "Wylosowane Zadanie nr " + (completedTasksCount + 1) + " (" + task.category.toUpperCase() + ")";
+          document.getElementById("resText").innerText = finalText;
+          document.getElementById("modifierDisplay").innerText = getRandom(modifiers);
+
+          completedTasksCount++;
+          updateSessionDisplay();
+        };
+
+        document.getElementById("drawPenaltyBtn").onclick = function() {
+          var title = "";
+          var desc = "";
+
+          if (completedTasksCount === 0) {
+            title = "🚨 MAKSYMALNA KARA (Porażka przed pierwszym zadaniem!)";
+            desc = "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów ogonem szczura w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.";
+          } else if (completedTasksCount === 1) {
+            title = "⚡ SUPER SUROWA KARA (Mnożnik 5x)";
+            desc = "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów czarną packą ze skutymi rękami za plecami.";
+          } else if (completedTasksCount >= 2 && completedTasksCount <= 3) {
+            title = "⚠️ SUROWA KARA (Mnożnik 4x)";
+            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara 4x: 90 klapsów różową packą w pełnym unieruchomieniu.";
+          } else if (completedTasksCount >= 4 && completedTasksCount <= 6) {
+            title = "⚖️ STANDARDOWA KARA (Mnożnik 3x - 2x)";
+            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara umiarkowana: 50 klapsów pasem i 5 minut stania w kącie.";
+          } else if (completedTasksCount >= 7 && completedTasksCount <= 9) {
+            title = "🍃 ŁAGODNA KARA (Mnożnik 1x)";
+            desc = "Dotarłaś bardzo daleko (" + completedTasksCount + " zadań)! Łagodna korekta: tylko 15 delikatnych klapsów dłonią.";
+          } else {
+            title = "👑 BRAK KARY (Ukończono 10+ zadań!)";
+            desc = "Wykonałaś już " + completedTasksCount + " zadań! Twój rygor został w pełni zaliczony – brak jakiejkolwiek kary. Jesteś wolna lub możesz kontynuować sesję!";
+          }
+
+          document.getElementById("resCategory").innerText = title;
+          document.getElementById("resText").innerText = desc;
+          document.getElementById("modifierDisplay").innerText = "Poziom sesji został zresetowany.";
+
+          completedTasksCount = 0;
+          updateSessionDisplay();
+        };
+
+        document.getElementById("resetSessionBtn").onclick = function() {
+          completedTasksCount = 0;
+          updateSessionDisplay();
+          document.getElementById("resCategory").innerText = "SESJA ZRESETOWANA";
+          document.getElementById("resText").innerText = "Licznik wyczyszczony. Rozpoczynasz od zadania nr 1.";
+          document.getElementById("modifierDisplay").innerText = "";
+        };
+
+        document.getElementById("generateOutfitBtn").onclick = function() {
+          document.getElementById("outfitBox").innerHTML =
+            "<li><strong>Obroża:</strong> " + getRandom(collars) + "</li>" +
+            "<li><strong>Góra (Bielizna):</strong> " + getRandom(bras) + "</li>" +
+            "<li><strong>Dół (Bielizna):</strong> " + getRandom(panties) + "</li>" +
+            "<li><strong>Nogi:</strong> " + getRandom(lowerLayers) + "</li>" +
+            "<li><strong>Główny Strój:</strong> " + getRandom(dresses) + "</li>" +
+            "<li><strong>Szaliki:</strong> " + getRandom(scarfCounts) + "</li>" +
+            "<li><strong>Zaciski/Klamry:</strong> " + getRandom(clampsTypes) + "</li>" +
+            "<li><strong>Narzędzie do klapsów:</strong> " + getRandom(spankingTools) + "</li>";
+        };
+
+        var timer = 900;
+        var interval = null;
+        var display = document.getElementById("timerDisplay");
+
+        document.getElementById("startTimer").onclick = function() {
+          if (interval) return;
+          interval = setInterval(function() {
+            if (timer > 0) {
+              timer--;
+              var m = Math.floor(timer / 60).toString();
+              var s = (timer % 60).toString();
+              if (m.length < 2) m = "0" + m;
+              if (s.length < 2) s = "0" + s;
+              display.innerText = m + ":" + s;
+            } else {
+              clearInterval(interval);
+              interval = null;
+              alert("Czas zadania minął!");
+            }
+          }, 1000);
+        };
+
+        document.getElementById("resetTimer").onclick = function() {
+          clearInterval(interval);
+          interval = null;
+          timer = 900;
+          display.innerText = "15:00";
+        };
+
+        updateSessionDisplay();
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initEvents);
+      } else {
+        initEvents();
+      }
+    })();
   </script>
 
 </body>
