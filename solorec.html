@@ -160,6 +160,8 @@
         <button class="btn" style="width:auto; padding:6px 12px; margin:0; background:#555; font-size:0.75rem;" id="resetSessionBtn">Reset Sesji</button>
       </div>
 
+      <button class="btn" style="background:var(--accent-gold); color:#000; font-size:1rem; margin-bottom:15px;" id="generateOutfitBtn">Wygeneruj Strój na Całą Sesję</button>
+
       <label for="categorySelect" style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Kategoria Wyzwania:</label>
       <select id="categorySelect">
         <option value="ALL">Wszystkie Kategorie</option>
@@ -175,32 +177,31 @@
 
       <button class="btn" id="spinBtn" style="margin-top:15px;">Wylosuj Zadanie</button>
       <button class="btn btn-danger" id="drawPenaltyBtn">Poddaj się / Kara za Błąd</button>
-      <button class="btn" style="background:var(--accent-gold); color:#000;" id="generateOutfitBtn">Wygeneruj Strój</button>
     </div>
 
     <div class="card">
-      <h3>Wynik Losowania:</h3>
+      <h3>Stały Strój na Całą Sesję:</h3>
+      <ul class="outfit-list" id="outfitBox">
+        <li>Wylosuj strój przed rozpoczęciem sesji.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Wynik Losowania Zadania:</h3>
       <div class="result-box">
         <div id="resCategory" style="color: var(--accent-gold); font-size: 0.85rem; text-transform: uppercase; font-weight: bold;">Gotowy</div>
-        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Kliknij przycisk powyżej, aby rozpocząć.</div>
+        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Kliknij przycisk powyżej, aby wylosować zadanie.</div>
         <div id="modifierDisplay" style="color: var(--accent-magenta); margin-top: 10px; font-size: 0.9rem; font-weight: bold;"></div>
       </div>
     </div>
 
     <div class="card">
-      <h3>Stoper Odliczający</h3>
+      <h3>Stoper Odliczający (<span id="taskTimeLabel" style="color:var(--accent-gold);">15 min</span>)</h3>
       <div class="timer" id="timerDisplay">15:00</div>
       <div style="display:flex; gap:10px;">
         <button class="btn" id="startTimer">Start</button>
         <button class="btn" style="background:#555;" id="resetTimer">Reset</button>
       </div>
-    </div>
-
-    <div class="card">
-      <h3>Wylosowany Strój:</h3>
-      <ul class="outfit-list" id="outfitBox">
-        <li>Brak wygenerowanego stroju.</li>
-      </ul>
     </div>
   </div>
 
@@ -209,14 +210,13 @@
       var completedTasksCount = 0;
 
       var clapCounts = [10, 15, 20, 25, 30, 40, 50, 75, 100];
+      var possibleMinutes = [5, 8, 10, 12, 15, 18, 20, 25];
 
       var spankingTools = [
-        "czarna packa", "różowa packa", "ogon szczura", "dłoń", "szeroki skórzany pas",
-        "wąski skórzany pasek", "paletka drewniana", "wylepiany pejczer", "whip/pejcz rzemienny",
-        "skórzana klapsówka z frędzlami", "paletka z otworami powietrznymi", "ciężka paczka z uchwytem",
-        "gumowa paletka treningowa", "płaska paczka skórzana", "sztywna paczka welurowa",
-        "zgięty pasek parciany", "dłoń w skórzanej rękawiczce", "podwójna paczka lakierowana",
-        "podłużny pasek z klamrą", "zbieżna miotełka skórzana"
+        "ogon szczura", "pejcz czarny", "pejcz różowy", "czarna packa", "różowa packa",
+        "dłoń", "ogon szczura", "pejcz czarny", "pejcz różowy", "czarna packa",
+        "różowa packa", "dłoń", "ogon szczura", "pejcz czarny", "pejcz różowy",
+        "czarna packa", "różowa packa", "dłoń", "ogon szczura", "pejcz czarny"
       ];
 
       var collars = [
@@ -250,7 +250,7 @@
         "bez szalika", "1 szalik", "2 szaliki", "3 szaliki", "4 szaliki naraz",
         "1 ciężki szal blanket scarf", "2 grube szale owinięte ciasno", "1 komin dzianinowy",
         "2 kominy dzianinowe nakładane na siebie", "1 chusta w kratę", "2 chusty spięte na szyi",
-        "3 szale owinięte wokół twarzy", "1 długa dzianinowa chusta", "2 szale acryliki z frędzlami",
+        "3 szale owinięte wokół twarzy", "1 długa dzianinowa chusta", "2 szale z frędzlami",
         "1 duży szal kaszmirowy", "3 szale unieruchamiające szyję", "4 szale owinięte po głowę",
         "1 szal szczelnie zakrywający usta", "2 szale spięte pasem", "3 ciężkie szale dzianinowe"
       ];
@@ -341,37 +341,31 @@
       }
 
       function buildTask(category, i) {
-        var br = bras[i % bras.length];
-        var pan = panties[i % panties.length];
-        var low = lowerLayers[i % lowerLayers.length];
-        var dr = dresses[i % dresses.length];
-        var col = collars[i % collars.length];
-        var sc = scarfCounts[i % scarfCounts.length];
-        var clamp = clampsTypes[i % clampsTypes.length];
         var tool = spankingTools[i % spankingTools.length];
         var ex = exerciseTypes[i % exerciseTypes.length];
+        var minutes = possibleMinutes[i % possibleMinutes.length];
 
         var hasClaps = (i % 2 === 0);
         var hasCuffs = (i % 3 === 0 || i % 5 === 0);
 
         var text = "";
-        var cuffText = hasCuffs ? " Ręce zakute w kajdanki na plecach, kostki spięte paskiem." : "";
+        var cuffText = hasCuffs ? " (Ręce zakute w kajdanki na plecach, kostki spięte paskiem)" : "";
 
         if (category === "feminizacja") {
-          text = "Załóż " + br + ", " + pan + ", " + low + " oraz " + dr + ". Obroża: " + col + ", dodatek: " + sc + ", zamocuj na piersiach: " + clamp + "." + cuffText + " Wykonaj serię eleganckich ukłonów przed lustrem.";
+          text = "Wykonaj serię ukłonów przed lustrem z zachowaniem idealnej sylwetki damskiej." + cuffText;
         } else if (category === "sensoryka") {
-          text = "Ubrana w " + br + ", " + pan + ", " + low + ", " + dr + ", obrożę: " + col + ", " + sc + ", opaskę na oczy (blindfold) oraz " + clamp + "." + cuffText + " Wytrzymaj w całkowitym bezruchu na krześle.";
+          text = "Wytrzymaj w całkowitym bezruchu na krześle z zamknij oczy/blindfold." + cuffText;
         } else if (category === "postawa") {
-          text = "Ubrana w " + br + ", " + pan + ", " + low + ", " + dr + ", obrożę: " + col + ", " + sc + " i szpilki, zamocuj na piersiach: " + clamp + "." + cuffText + " Wykonaj wyzwanie: " + ex + ".";
+          text = "Wykonaj wyzwanie postawy: " + ex + "." + cuffText;
         } else if (category === "sluzbalczosc") {
-          text = "Ubrana w " + br + ", " + pan + ", " + low + ", " + dr + ", obrożę: " + col + ", " + sc + " i " + clamp + "." + cuffText + " Wykonaj dokładne polerowanie obuwia lub czyszczenie na kolanach.";
+          text = "Wykonaj dokładne polerowanie obuwia lub czyszczenie na kolanach." + cuffText;
         }
 
         if (hasClaps) {
           text += " Na zakończenie wymierz sobie {{CLAPS_PLACEHOLDER}} klapsów narzędziem: " + tool + ".";
         }
 
-        return { category: category, text: text, hasClaps: hasClaps, baseClaps: clapCounts[i % clapCounts.length] };
+        return { category: category, text: text, hasClaps: hasClaps, baseClaps: clapCounts[i % clapCounts.length], minutes: minutes };
       }
 
       var tasks = [];
@@ -380,6 +374,19 @@
         tasks.push(buildTask("sensoryka", i));
         tasks.push(buildTask("postawa", i));
         tasks.push(buildTask("sluzbalczosc", i));
+      }
+
+      var timerInterval = null;
+      var timerSeconds = 900;
+
+      function setTimerMinutes(mins) {
+        timerSeconds = mins * 60;
+        var m = Math.floor(timerSeconds / 60).toString();
+        var s = (timerSeconds % 60).toString();
+        if (m.length < 2) m = "0" + m;
+        if (s.length < 2) s = "0" + s;
+        document.getElementById("timerDisplay").innerText = m + ":" + s;
+        document.getElementById("taskTimeLabel").innerText = mins + " min";
       }
 
       function initEvents() {
@@ -396,9 +403,16 @@
             finalText = finalText.replace("{{CLAPS_PLACEHOLDER}}", claps);
           }
 
-          document.getElementById("resCategory").innerText = "Wylosowane Zadanie nr " + (completedTasksCount + 1) + " (" + task.category.toUpperCase() + ")";
+          document.getElementById("resCategory").innerText = "Wylosowane Zadanie nr " + (completedTasksCount + 1) + " (" + task.category.toUpperCase() + ") • Czas: " + task.minutes + " min";
           document.getElementById("resText").innerText = finalText;
           document.getElementById("modifierDisplay").innerText = getRandom(modifiers);
+
+          // Automatyczne ustawienie stopera na wylosowany czas
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+          setTimerMinutes(task.minutes);
 
           completedTasksCount++;
           updateSessionDisplay();
@@ -407,22 +421,23 @@
         document.getElementById("drawPenaltyBtn").onclick = function() {
           var title = "";
           var desc = "";
+          var tool = getRandom(spankingTools);
 
           if (completedTasksCount === 0) {
             title = "🚨 MAKSYMALNA KARA (Porażka przed pierwszym zadaniem!)";
-            desc = "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów ogonem szczura w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.";
+            desc = "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów (narzędzie: " + tool + ") w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.";
           } else if (completedTasksCount === 1) {
             title = "⚡ SUPER SUROWA KARA (Mnożnik 5x)";
-            desc = "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów czarną packą ze skutymi rękami za plecami.";
+            desc = "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów (narzędzie: " + tool + ") ze skutymi rękami za plecami.";
           } else if (completedTasksCount >= 2 && completedTasksCount <= 3) {
             title = "⚠️ SUROWA KARA (Mnożnik 4x)";
-            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara 4x: 90 klapsów różową packą w pełnym unieruchomieniu.";
+            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara 4x: 90 klapsów (narzędzie: " + tool + ") w pełnym unieruchomieniu.";
           } else if (completedTasksCount >= 4 && completedTasksCount <= 6) {
             title = "⚖️ STANDARDOWA KARA (Mnożnik 3x - 2x)";
-            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara umiarkowana: 50 klapsów pasem i 5 minut stania w kącie.";
+            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara umiarkowana: 50 klapsów (narzędzie: " + tool + ") i 5 minut stania w kącie.";
           } else if (completedTasksCount >= 7 && completedTasksCount <= 9) {
             title = "🍃 ŁAGODNA KARA (Mnożnik 1x)";
-            desc = "Dotarłaś bardzo daleko (" + completedTasksCount + " zadań)! Łagodna korekta: tylko 15 delikatnych klapsów dłonią.";
+            desc = "Dotarłaś bardzo daleko (" + completedTasksCount + " zadań)! Łagodna korekta: tylko 15 delikatnych klapsów (narzędzie: dłoń).";
           } else {
             title = "👑 BRAK KARY (Ukończono 10+ zadań!)";
             desc = "Wykonałaś już " + completedTasksCount + " zadań! Twój rygor został w pełni zaliczony – brak jakiejkolwiek kary. Jesteś wolna lub możesz kontynuować sesję!";
@@ -453,36 +468,35 @@
             "<li><strong>Główny Strój:</strong> " + getRandom(dresses) + "</li>" +
             "<li><strong>Szaliki:</strong> " + getRandom(scarfCounts) + "</li>" +
             "<li><strong>Zaciski/Klamry:</strong> " + getRandom(clampsTypes) + "</li>" +
-            "<li><strong>Narzędzie do klapsów:</strong> " + getRandom(spankingTools) + "</li>";
+            "<li><strong>Główne Narzędzie Karcenia:</strong> " + getRandom(spankingTools) + "</li>";
         };
 
-        var timer = 900;
-        var interval = null;
         var display = document.getElementById("timerDisplay");
 
         document.getElementById("startTimer").onclick = function() {
-          if (interval) return;
-          interval = setInterval(function() {
-            if (timer > 0) {
-              timer--;
-              var m = Math.floor(timer / 60).toString();
-              var s = (timer % 60).toString();
+          if (timerInterval) return;
+          timerInterval = setInterval(function() {
+            if (timerSeconds > 0) {
+              timerSeconds--;
+              var m = Math.floor(timerSeconds / 60).toString();
+              var s = (timerSeconds % 60).toString();
               if (m.length < 2) m = "0" + m;
               if (s.length < 2) s = "0" + s;
               display.innerText = m + ":" + s;
             } else {
-              clearInterval(interval);
-              interval = null;
+              clearInterval(timerInterval);
+              timerInterval = null;
               alert("Czas zadania minął!");
             }
           }, 1000);
         };
 
         document.getElementById("resetTimer").onclick = function() {
-          clearInterval(interval);
-          interval = null;
-          timer = 900;
-          display.innerText = "15:00";
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+          setTimerMinutes(15);
         };
 
         updateSessionDisplay();
