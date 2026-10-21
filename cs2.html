@@ -163,7 +163,7 @@
     <div class="card">
       <h3>Twój Strój do CS2:</h3>
       <ul class="outfit-list" id="outfitBox">
-        <li>Kliknij przycisk powyżej, aby przygotować ekwipunek do gry.</li>
+        <li>Kliknij przycisk powyżej, aby przygotować zestaw do gry.</li>
       </ul>
     </div>
 
@@ -183,88 +183,202 @@
       var deathCount = 0;
 
       var csCollars = [
-        "posture collar (zaciągnięta, prostuje plecy podczas celowania)",
-        "wysoka obroża z ringiem",
-        "szeroka obroża skórzana",
-        "obroża z miękkim wyściełaniem"
+        "posture collar (zaciągnięta, prostuje plecy podczas celowania)", "wysoka obroża usztywniająca z ringiem",
+        "szeroka obroża skórzana z klamrą", "obroża z metalowym kółkiem z przodu", "obroża z miękkim wyściełaniem",
+        "obroża lakierowana czarna", "obroża różowa z ćwiekami", "obroża z miejscem na smycz",
+        "obroża z dołączonym gagem", "obroża usztywniana z zamkiem", "obroża ciasno dopasowana z paskiem",
+        "obroża z uszkami bocznymi", "obroża z podwójną klamrą", "obroża z łańcuszkiem dekoracyjnym",
+        "obroża aksamitna z pierścieniem", "obroża skórzana ze sprzączką z tyłu", "obroża usztywniana do brody",
+        "obroża z dzwoneczkiem", "obroża koronkowa", "obroża z silikonowym pierścieniem"
       ];
 
       var csBras = [
-        "sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "biustonosz gładki czarny"
+        "sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "brak biustonosza",
+        "biustonosz usztywniany z fiszbinami", "biustonosz miękki bez fiszbin", "biustonosz bawełniany",
+        "biustonosz gładki czarny", "biustonosz z paskami na dekolcie", "biustonosz koronkowy bralette",
+        "biustonosz usztywniany typu balconette", "biustonosz czerwony satynowy", "biustonosz z głębokim wycięciem",
+        "biustonosz bez ramiączek", "biustonosz zapinany z przodu", "biustonosz półprzezroczysty",
+        "biustonosz gorsetowy krótki", "biustonosz modelujący", "biustonosz sportowy z szeroką gumą", "biustonosz bezszwowy"
       ];
 
       var csPanties = [
-        "ciasne stringi", "figi koronkowe", "brak majtek", "figi bezszwowe"
+        "ciasne stringi", "figi", "brak majtek", "stringi koronkowe z wysokim stanem",
+        "figi bezszwowe", "stringi z paskami na biodrach", "figi kryjące bawełniane",
+        "stringi satynowe", "figi brazyliany", "stringi bezszwowe", "figi z wysokim stanem modelujące",
+        "stringi z rozcięciem", "figi z prześwitującą siateczką", "stringi różowe koronkowe",
+        "figi mocno wycięte", "stringi bawełniane", "figi satynowe z kokardką", "stringi z biżuteryjnym kółkiem",
+        "figi koronkowe czerwone", "stringi z gumką w talii"
       ];
 
       var csScarves = [
-        "2 szaliki owinięte ciasno wokół szyi (stłumiony głos w mikrofonie)",
-        "1 ciężki szal blanket scarf pod obrożą",
-        "komin dzianinowy podciągnięty wysoko pod brodę",
-        "3 szale ograniczające ruchy głowy na boki"
+        "2 szaliki owinięte ciasno wokół szyi (stłumiony głos w mikrofonie)", "1 ciężki szal blanket scarf pod obrożą",
+        "komin dzianinowy podciągnięty wysoko pod brodę", "3 szale ograniczające ruchy głowy na boki",
+        "1 szalik zakrywający usta i podbródek", "2 szale acryliki z frędzlami", "1 komin dzianinowy ciasno owinięty",
+        "3 grube szale unieruchamiające kark", "1 duży szal kaszmirowy", "2 chusty spięte na szyi",
+        "1 szal szczelnie zakrywający usta", "4 szaliki naraz na całej szyi", "1 szal owinięty jak kompres",
+        "2 szale ciasno dociśnięte paskiem", "1 lekki szal wiskozowy", "3 kominy dzianinowe nakładane na siebie",
+        "1 szal kraciasty owinięty po brodę", "2 szaliki bawełniane", "1 szal wełniany z frędzlami", "brak szalika"
       ];
 
       var csLower = [
-        "grube czarne rajstopy (100D)",
-        "prześwitujące czarne rajstopy",
-        "dopasowane elastyczne legginsy",
-        "kabaretki o drobnym oczku"
+        "grube czarne rajstopy (100D)", "prześwitujące czarne rajstopy", "dopasowane elastyczne legginsy",
+        "rajstopy ze szwem z tyłu", "rajstopy kryjące 80D", "rajstopy błyszczące wieczorowe",
+        "kabaretki o drobnym oczku", "kabaretki o dużym oczku", "legginsy zamszowe",
+        "rajstopy w drobne kropki", "rajstopy bezpalcowe", "rajstopy ze szwem i wzorem",
+        "rajstopy wzorzyste geometryczne", "legginsy błyszczące", "rajstopy kryjące cieliste",
+        "rajstopy modelujące pośladki", "kabaretki założone na gładkie rajstopy", "rajstopy matowe 60D",
+        "legginsy z wysokim stanem", "rajstopy czarne z połyskiem"
       ];
 
       var csDresses = [
-        "krótka dopasowana sukienka bodycon (dająca pełną swobodę nóg pod biurkiem)",
-        "dzianinowa sukienka",
-        "rozkloszowana spódnica i krótki top",
-        "mała czarna"
+        "krótka dopasowana sukienka bodycon (swoboda nóg pod biurkiem)", "dzianinowa sukienka",
+        "rozkloszowana spódnicę i krótki top", "mała czarna", "sukienkę maxi z rozcięciem",
+        "ołówkową spódnicę i bluzkę", "kwiatową sukienkę", "sukienkę midi",
+        "czerwoną sukienkę bodycon", "plisowaną spódnicę maxi", "skórzaną spódnicę ołówkową",
+        "satynową sukienkę slip dress", "sukienkę kopertową z wiązaniem", "sukienkę z głębokim dekoltem",
+        "elegancki komplet ze spódnicą", "sukienkę w kratkę", "sukienkę z golfem dopasowaną",
+        "spódnicę tiulową z topem", "sukienkę aksamitną", "sukienkę na ramiączkach"
       ];
 
       var csClamps = [
-        "clover clamps na piersiach (dla dodatkowego bodźca podczas celowania)",
-        "lekki zacisk klamrowy",
-        "spinacze z delikatnym obciążeniem",
-        "brak zacisków (skupienie na grze)"
+        "clover clamps na piersiach", "spinacze z ciężarkami", "metalowe zaciski klamrowe",
+        "zaciski klamrowe z dzwoneczkami", "ciężkie zaciski śrubowe", "klamry sutkowe na łańcuszku",
+        "zaciski z miękką osłonką", "regulowane klamry sprężynowe", "małe klamerki zaciskowe",
+        "zaciski z ozdobnymi piórkami", "klamry z lekkim obciążeniem", "metalowe klipsy zaciskowe",
+        "zaciski klamrowe połączone łańcuszkiem", "klamry śrubowe z regulacją nacisku", "zaciski z silikonową podkładką",
+        "małe spinacze z odważnikami", "klipsy zaciskowe do intensywnej stymulacji", "klamry sprężynowe z dzwonkami",
+        "zaciski rurkowe", "brak zacisków"
       ];
 
-      // Reakcje na FRAG (Zabicie wroga) - nagrody / podbicie satysfakcji
+      var spankingTools = [
+        "ogon szczura", "pejcz czarny", "pejcz różowy", "czarna packa", "różowa packa",
+        "dłoń", "szeroki skórzany pas", "wąski skórzany pasek", "paletka drewniana", "wylepiany pejczer",
+        "whip/pejcz rzemienny", "skórzana klapsówka z frędzlami", "paletka z otworami powietrznymi",
+        "ciężka paczka z uchwytem", "gumowa paletka treningowa", "płaska paczka skórzana",
+        "sztywna paczka welurowa", "zgięty pasek parciany", "dłoń w skórzanej rękawiczce", "zbieżna miotełka skórzana"
+      ];
+
+      // 20 NAGRÓD ZA FRAG (ZABÓJSTWO)
       var fragEvents = [
-        "Dobra robota! Nagroda za fraga: Szybkie, dumnie uniesienie podbródka i uśmiech w obroży.",
-        "Zabójstwo zaliczone! Pochwal się drużynie stłumionym, kobiecym głosem w mikrofonie.",
-        "Precyzyjny frag! Nagroda: Przez następną minutę czujesz przyjemny dreszcz dumy ze swojej uległej formy.",
-        "Kolejny wróg w piachu. Nagroda: Delikatne dotknięcie i wygładzenie sukienki pod biurkiem."
+        "Nagroda #1: Zrób sobie powolny, dwuminutowy masaż sutków przez materiał biustonosza w przerwie.",
+        "Nagroda #2: Zdejmij na chwilę klamry z sutków i rozmasuj je delikatnie okrężnymi ruchami.",
+        "Nagroda #3: Masaż i lekkie uszczypnięcie sutków aż do stwardnienia w nagrodę za celny strzał.",
+        "Nagroda #4: Przejedź dłonią po udach w rajstopach i wykonaj powolne gładzenie piersi.",
+        "Nagroda #5: Przez całą nową rundę możesz delikatnie pocierać sutki lewą dłonią przed startem.",
+        "Nagroda #6: Pieszczota sutków i dekoltu dłonią wsuniętą pod bluzkę.",
+        "Nagroda #7: Szybki masaż obu sutków ze szczypaniem i głęboki oddech w obroży.",
+        "Nagroda #8: Ulga! Możliwość rozluźnienia szalika na 30 sekund i zmysłowy masaż szyi.",
+        "Nagroda #9: Wykonaj powolny gładzący ruch dłonią od kolana po udo w rajstopach.",
+        "Nagroda #10: Zmysłowy masaż sutka dłonią zwilżoną w ślinie.",
+        "Nagroda #11: Szybkie pogłaskanie i zaciśnięcie dłoni na piersi z uczuciem dumy.",
+        "Nagroda #12: Przejedź palcami po ustach i obojczyku, celebrując uległy wygląd.",
+        "Nagroda #13: Delikatne poklepanie się po pośladkach w sukience za idealny czas reakcji.",
+        "Nagroda #14: Lekkie pociągnięcie i masaż sutka kciukiem oraz palcem wskazującym.",
+        "Nagroda #15: Chwila gładzenia tali i bioder w obcisłej sukience pod biurkiem.",
+        "Nagroda #16: Masaż sutków wykonywany w rytmie miarowych oddechów.",
+        "Nagroda #17: Powolne pocieranie klatki piersiowej i brzucha dłonią.",
+        "Nagroda #18: Możliwość poprawienia bielizny i krótkiego masażu piersi dłonią.",
+        "Nagroda #19: Zmysłowe przeciągnięcie się na krześle z uniesioną brodą i masażem sutków.",
+        "Nagroda #20: Delikatny, pieszczotliwy uścisk obu piersi dłońmi na zakończenie rundy."
       ];
 
-      // Reakcje na ŚMIERĆ (Zgon) - małe kary w rundzie
+      // 20 KAR ZA ŚMIERĆ (ZGON)
       var deathEvents = [
-        "Zgon! Mini-kara: Szybkie 3 klapsy ogonem szczura lewą ręką.",
-        "Zginęłaś! Mini-kara: Mocno zaciśnij zęby i przez całą rundę oglądania kolegów siedzisz ze złączonymi kolanami.",
-        "Zademonstrowano błąd. Mini-kara: Pociągnij za obrożę posture collar do samego dołu i weź głęboki oddech.",
-        "Śmierć w akcji. Mini-kara: Ciche, stłumione jęknięcie niezadowolenia w mikrofon."
+        "Kara #1: Szybkie 5 klapsów ogonem szczura lewą ręką.",
+        "Kara #2: Zaciśnij mocno zęby i przez całą rundę obserwacji graj ze złączonymi kolanami.",
+        "Kara #3: Zaciągnij obrożę posture collar mocniej o jeden ząbek.",
+        "Kara #4: 10 uderzeń czarnym pejczem w udo w rajstopach.",
+        "Kara #5: Załóż na sutki clover clamps lub zwiększ ich nacisk na czas kolejnej rundy.",
+        "Kara #6: Wydaj ciche, stłumione jęknięcie niezadowolenia do mikrofonu.",
+        "Kara #7: Wykonaj 15 klapsów różowym pejczem przed zakupem broni.",
+        "Kara #8: Przez całą następną rundę siedź z podwiniętą sukienką do góry.",
+        "Kara #9: Skrzyżuj stopy mocno pod biurkiem i nie rozłączaj ich przez 2 rundy.",
+        "Kara #10: Wykonaj 8 klapsów czarną packą po pośladkach na stojąco.",
+        "Kara #11: Pociągnij się mocno za obrożę w dół i wytrzymaj tak 10 sekund.",
+        "Kara #12: 12 mocnych uderzeń ogonem szczura w prawe udo.",
+        "Kara #13: Nałóż dodatkowy szalik na szyję lub zaciśnij obecny ciasno pod brodę.",
+        "Kara #14: Siedź na samym skraju krzesła z wyprostowanym kręgosłupem przez cały zamach.",
+        "Kara #15: 10 klapsów pasem wymierzonych lewą ręką.",
+        "Kara #16: Pomaluj jeden paznokieć na czerwono przed rozpoczęciem nowej rundy.",
+        "Kara #17: Zamknij oczy na 15 sekund w przerwie po zgonie i zrób skłon głową do kolan.",
+        "Kara #18: Wykonaj 20 klapsów dłonią w udostronie.",
+        "Kara #19: Przez nową rundę zakaz wypowiadania jakichkolwiek słów przez mikrofon.",
+        "Kara #20: Zaciśnij zęby i przyjmij 10 klapsów różowym pejczem bezpośrednio w pośladki."
       ];
 
-      // Reakcje na WYGRANĄ RUNDĘ - nagroda
+      // 20 NAGRÓD ZA WYGRANĄ RUNDĘ
       var winRoundEvents = [
-        "Runda wygrana! Nagroda: Chwila pełnego relaksu w obroży, rozluźnij ramiona na 10 sekund.",
-        "Sukces drużyny! Nagroda: Poczuj dumę jako zgrabna, zdyscyplinowana zawodniczka.",
-        "Wygrana! Nagroda: Delikatne poklepanie się po udzie w rajstopach za świetną robotę."
+        "Nagroda #1: Zmysłowy masaż obu sutków i piersi dłońmi w nagrodę za dominację.",
+        "Nagroda #2: Chwila pełnego relaksu – zdejmij zaciski i rozmasuj piersi.",
+        "Nagroda #3: Głaskanie uda po rajstopach i delikatny masaż okolic obojczyka.",
+        "Nagroda #4: Pieszczota sutków opuszkiem palca z obietnicą braku kar.",
+        "Nagroda #5: Szybkie gładzenie pośladków w koronkowej bieliznie.",
+        "Nagroda #6: Rozluźnienie szalika na czas fazy zakupowej.",
+        "Nagroda #7: Wykonaj powolny masaż brzucha i dekoltu dłońmi.",
+        "Nagroda #8: Chwila głębokiego oddechu z odchyloną głową w obroży.",
+        "Nagroda #9: Zmysłowy masaż uda od kolana w górę pod sukienką.",
+        "Nagroda #10: Możliwość swobodnego poprawienia stroju i wygładzenia tkaniny.",
+        "Nagroda #11: Pieszczotliwe rozcieranie sutków przez materiał bluzki.",
+        "Nagroda #12: Szybkie przeciągnięcie dłonią po brzuchu i piersiach.",
+        "Nagroda #13: Pochwal się w głowie uległą postawą i zrób delikatny masaż karku.",
+        "Nagroda #14: Rozmasowanie napiętych mięśni ud dłońmi.",
+        "Nagroda #15: Pocieranie piersi i sutków z lekko przymkniętymi oczami.",
+        "Nagroda #16: Przejdź dłonią po obroży i zrób sobie zmysłową pauzę.",
+        "Nagroda #17: Delikatny masaż pleców na wysokości lędźwi.",
+        "Nagroda #18: Odpoczynek dla ramion z pieszczotą sutków kciukami.",
+        "Nagroda #19: Szybkie wygładzenie rajstóp na całej długości nóg.",
+        "Nagroda #20: Zmysłowy masaż całej klatki piersiowej i brody."
       ];
 
-      // Reakcje na PRZEGRANĄ RUNDĘ - kara
+      // 20 KAR ZA PRZEGRANĄ RUNDĘ
       var loseRoundEvents = [
-        "Przegrana runda! Kara: 15 mocnych klapsów czarnym pejczem w przerwie zakupowej.",
-        "Runda w plecy! Kara: Dociśnij obrożę i przez kolejne 2 rundy graj ze skrzyżowanymi stopami pod biurkiem.",
-        "Zawiodłaś drużynę w tej rundzie. Kara: 10 uderzeń różowym pejczem."
+        "Kara #1: 20 mocnych klapsów czarnym pejczem w przerwie zakupowej.",
+        "Kara #2: Zamocuj ciasno clover clamps na sutkach i graj z nimi przez 3 kolejne rundy.",
+        "Kara #3: 15 uderzeń ogonem szczura ze skutymi nogami w kostkach.",
+        "Kara #4: Dociśnij obrożę i graj ze skrzyżowanymi stopami pod biurkiem.",
+        "Kara #5: Wykonaj 25 klapsów różowym pejczem w udo.",
+        "Kara #6: Szybkie 10 klapsów czarną packą i przymus stania przez następną rundę.",
+        "Kara #7: Załóż dodatkowy szal na usta i brodę na kolejne 2 rundy.",
+        "Kara #8: Wykonaj 15 przysiadów w szpilkach przed biurkiem.",
+        "Kara #9: Zaciśnij klamry na sutkach z maksymalną siłą na czas trwania nowej rundy.",
+        "Kara #10: 18 klapsów pasem wymierzonych mocno i zdecydowanie.",
+        "Kara #11: Poruszaj się w nowej rundzie w stałym skłonie tułowia.",
+        "Kara #12: Wykonaj 30 uderzeń różowym pejczem lewą ręką.",
+        "Kara #13: Zwiąż kostki pasem na 2 kolejne rundy pod biurkiem.",
+        "Kara #14: 12 klapsów czarną packą bezpośrednio w udostronie.",
+        "Kara #15: Przez całą nową rundę zakaz wydawania jakichkolwiek dźwięków.",
+        "Kara #16: Nałóż gęsty komin dzianinowy aż do nosa.",
+        "Kara #17: 20 klapsów ogonem szczura pośladki w sukience.",
+        "Kara #18: Klęcz przy krześle przez całą fazę zakupową.",
+        "Kara #19: Zaciągnij obrożę posture collar maksymalnie blisko brody.",
+        "Kara #20: Przyjmij 15 klapsów czarnym pejczem w prawe i 15 w lewe udo."
       ];
 
-      // Wynik MECZU: WYGRANA
+      // 20 NAGRÓD / KAR ZA MECZ
       var matchWinEvents = [
-        "ZWYCIĘSTWO W MECZU! 👑 Nagroda królewska: Masz pełne prawo do dumy! Zdejmij jeden szalik, rozepnij obrożę i ciesz się wspaniałym wynikiem w swojej sukience.",
-        "Wspaniały mecz! Twój rygor przyniósł skutek. Nagroda: Pełne uznanie i zasłużony odpoczynek od kar przez resztę dnia."
+        "ZWYCIĘSTWO #1: Zdejmij klamry, rozepnij obrożę i zrób sobie długi, zmysłowy masaż całego ciała i piersi.",
+        "ZWYCIĘSTWO #2: Pełne rozprężenie – usuń szaliki i poddaj się słodkim pieszczotom bez kar przez resztę dnia.",
+        "ZWYCIĘSTWO #3: Zmysłowa kąpiel lub odpoczynek w uległej sukience z uczuciem pełnego triumfu.",
+        "ZWYCIĘSTWO #4: Słodka ulga – zdejmij ciasną bieliznę i rozmasuj całe ciało oliwką.",
+        "ZWYCIĘSTWO #5: Zrób sobie 10 minut wolnego masażu piersi i sutków przy ulubionej muzyce.",
+        "ZWYCIĘSTWO #6: Prawo do zdjęcia obroży i odpoczynku w wygodnej pozycji.",
+        "ZWYCIĘSTWO #7: Zmysłowy masaż nóg w rajstopach od stóp po uda.",
+        "ZWYCIĘSTWO #8: Zdejmowanie kolejnych warstw rygoru z pełną satysfakcją.",
+        "ZWYCIĘSTWO #9: Pełen masaż dekoltu, szyi i piersi po wygranym starciu.",
+        "ZWYCIĘSTWO #10: Prawo do nagrodzenia się słodkim poczęstunkiem i chwilą relaksu."
       ];
 
-      // Wynik MECZU: PRZEGRANA
       var matchLoseEvents = [
-        "PRZEGRANY MECZ! 🚨 Główna kara: 150 klapsów ogonem szczura, 10 minut klęczenia twarzą do ściany w pełnym zakuciu w kajdanki na ręce i nogi.",
-        "Porażka w starciu. Kara: 120 uderzeń czarnym pejczem i przymusowe pozostanie w pełnym rygorystycznym zestawie bez rozпиnać przez 30 minut."
+        "PORAŻKA #1: 150 klapsów ogonem szczura, 10 minut klęczenia twarzą do ściany w kajdankach.",
+        "PORAŻKA #2: 120 uderzeń czarnym pejczem i pozostanie w zestawie z clover clamps przez 30 minut.",
+        "PORAŻKA #3: 100 klapsów różowym pejczem i 15 minut stania w bezruchu w obroży posture collar.",
+        "PORAŻKA #4: Pełne skrępowanie rąk i nóg na 20 minut po zakończonym meczu.",
+        "PORAŻKA #5: 140 klapsów pasem i przymusowe sprzątanie pokoju na kolanach.",
+        "PORAŻKA #6: Założenie gaga i 4 szalików na raz na kolejne 25 minut.",
+        "PORAŻKA #7: 110 mocnych uderzeń ogonem szczura w pozycji uległej na kolanach.",
+        "PORAŻKA #8: Klęczenie na twardej podłodze ze skutymi rękami za plecami przez 15 minut.",
+        "PORAŻKA #9: 130 klapsów czarną packą po pośladkach i udach.",
+        "PORAŻKA #10: Pełne usztywnienie ciała pasami i obrożą na pół godziny po meczu."
       ];
 
       function getRandom(arr) {
@@ -272,7 +386,7 @@
       }
 
       function updateCounter() {
-        document.getElementById("sessionCounter").innerText = "Statystyki: Fragi: " + fragCount + " | Zgony: " + deathCount;
+        document.getElementById("sessionCounter").innerText = "Statystyki CS2 | Fragi: " + fragCount + " | Zgony: " + deathCount;
       }
 
       document.getElementById("generateOutfitBtn").onclick = function() {
@@ -280,50 +394,51 @@
           "<li><strong>Obroża:</strong> " + getRandom(csCollars) + "</li>" +
           "<li><strong>Góra (Bielizna):</strong> " + getRandom(csBras) + "</li>" +
           "<li><strong>Dół (Bielizna):</strong> " + getRandom(csPanties) + "</li>" +
-          "<li><strong>Szyja:</strong> " + getRandom(csScarves) + "</li>" +
+          "<li><strong>Szyja / Szalik:</strong> " + getRandom(csScarves) + "</li>" +
           "<li><strong>Nogi:</strong> " + getRandom(csLower) + "</li>" +
-          "<li><strong>Strój główny:</strong> " + getRandom(csDresses) + "</li>" +
-          "<li><strong>Piersi:</strong> " + getRandom(csClamps) + "</li>";
+          "<li><strong>Główny Strój:</strong> " + getRandom(csDresses) + "</li>" +
+          "<li><strong>Zaciski / Klamry:</strong> " + getRandom(csClamps) + "</li>" +
+          "<li><strong>Główne Narzędzie Karcenia:</strong> " + getRandom(spankingTools) + "</li>";
       };
 
       document.getElementById("fragBtn").onclick = function() {
         fragCount++;
         updateCounter();
-        document.getElementById("resCategory").innerText = "ZABÓJSTWO (FRAG)";
+        document.getElementById("resCategory").innerText = "ZABÓJSTWO (FRAG) - NAGRODA";
         document.getElementById("resText").innerText = getRandom(fragEvents);
-        document.getElementById("modifierDisplay").innerText = "Dobry strzał!";
+        document.getElementById("modifierDisplay").innerText = "Świetne trafienie!";
       };
 
       document.getElementById("deathBtn").onclick = function() {
         deathCount++;
         updateCounter();
-        document.getElementById("resCategory").innerText = "ŚMIERĆ (ZGON)";
+        document.getElementById("resCategory").innerText = "ŚMIERĆ (ZGON) - MINI-KARA";
         document.getElementById("resText").innerText = getRandom(deathEvents);
-        document.getElementById("modifierDisplay").innerText = "Musisz się poprawić w kolejnym starciu.";
+        document.getElementById("modifierDisplay").innerText = "Popraw skupienie w kolejnej rundzie.";
       };
 
       document.getElementById("winRoundBtn").onclick = function() {
-        document.getElementById("resCategory").innerText = "WYGRANA RUNDA (NAGRODA)";
+        document.getElementById("resCategory").innerText = "WYGRANA RUNDA - NAGRODA";
         document.getElementById("resText").innerText = getRandom(winRoundEvents);
-        document.getElementById("modifierDisplay").innerText = "Dobra robota drużynowa.";
+        document.getElementById("modifierDisplay").innerText = "Dobra praca zespołu.";
       };
 
       document.getElementById("loseRoundBtn").onclick = function() {
-        document.getElementById("resCategory").innerText = "PRZEGRANA RUNDA (KARA)";
+        document.getElementById("resCategory").innerText = "PRZEGRANA RUNDA - KARA";
         document.getElementById("resText").innerText = getRandom(loseRoundEvents);
-        document.getElementById("modifierDisplay").innerText = "Wypełnij karę przed nową rundą.";
+        document.getElementById("modifierDisplay").innerText = "Wykonaj karę przed nową rundą.";
       };
 
       document.getElementById("winMatchBtn").onclick = function() {
         document.getElementById("resCategory").innerText = "TRIUMF - WYGRANY MECZ";
         document.getElementById("resText").innerText = getRandom(matchWinEvents);
-        document.getElementById("modifierDisplay").innerText = "Sesja zakończona sukcesem.";
+        document.getElementById("modifierDisplay").innerText = "Mecz wygrany, czas na nagrodę!";
       };
 
       document.getElementById("loseMatchBtn").onclick = function() {
         document.getElementById("resCategory").innerText = "PORAŻKA - PRZEGRANY MECZ";
         document.getElementById("resText").innerText = getRandom(matchLoseEvents);
-        document.getElementById("modifierDisplay").innerText = "Czas ponieść konsekwencje porażki.";
+        document.getElementById("modifierDisplay").innerText = "Czas ponieść konsekwencje.";
       };
 
       document.getElementById("resetSessionBtn").onclick = function() {
@@ -331,7 +446,7 @@
         deathCount = 0;
         updateCounter();
         document.getElementById("resCategory").innerText = "Statystyki zresetowane";
-        document.getElementById("resText").innerText = "Powodzenia w nowym meczu w CS2!";
+        document.getElementById("resText").innerText = "Powodzenia w nowym meczu CS2!";
         document.getElementById("modifierDisplay").innerText = "";
       };
 
