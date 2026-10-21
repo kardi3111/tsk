@@ -329,6 +329,47 @@
         "Modyfikator BDSM: Dłonie zakute w rękawice bez palców spięte razem z tyłu."
       ];
 
+      // Zróżnicowane pule kar (po 5 różnych opcji na każdy próg)
+      var penaltiesLevel0 = [
+        "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów ogonem szczura w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.",
+        "Ucieczka przed startem! Kara 5x: 120 uderzeń czarnym pejczem w pozycji uległej na kolanach ze skutymi rękami za plecami.",
+        "Brak posłuszeństwa przed 1. zadaniem! Kara 5x: 100 mocnych klapsów różowym pejczem, a następnie 10 minut stania w bezruchu pod ścianą z rękami spiętymi z obrożą.",
+        "Złamanie rygoru zerowego! Kara 5x: 140 klapsów pasem połączone z 8 minutami klęczenia na twardej podłodze z dwiema parami kajdanków.",
+        "Odmowa wejścia w tryb dyscypliny! Kara 5x: 130 uderzeń ogonem szczura oraz przymusowe zapięcie pasów unieruchamiających."
+      ];
+
+      var penaltiesLevel1 = [
+        "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów czarną packą ze skutymi rękami za plecami.",
+        "Potknięcie na starcie! Kara 5x: 100 uderzeń czarnym pejczem na stojąco w całkowitym milczeniu.",
+        "Błąd na pierwszym kroku! Kara 5x: 110 klapsów ogonem szczura i 7 minut w pozycji głębokiego skłonu.",
+        "Niedotrzymanie dyscypliny 1. stopnia! Kara 5x: 90 mocnych uderzeń różowym pejczem z rękami skutymi do lędźwi.",
+        "Przerwanie otwarcia sesji! Kara 5x: 125 klapsów dłonią w skórzanej rękawiczce i zakuciu stóp na 10 minut."
+      ];
+
+      var penaltiesLevel2_3 = [
+        "Przerwano po kilku zadaniach. Kara 4x: 90 klapsów różową packą w pełnym unieruchomieniu.",
+        "Złamanie ciągłości rygoru! Kara 4x: 80 uderzeń czarnym pejczem w pozycji uległej z obrożą zaciągniętą do oporu.",
+        "Wycofanie w środku sesji! Kara 4x: 100 klapsów ogonem szczura na kolanach przykrytych dwoma szalami.",
+        "Przedwczesna rezygnacja! Kara 4x: 75 mocnych uderzeń pasem ze skutymi nadgarstkami i opaską na oczach.",
+        "Utrata dyscypliny w fazie wzrostu! Kara 4x: 85 klapsów czarną packą i 5 minut bezruchu pod ścianą."
+      ];
+
+      var penaltiesLevel4_6 = [
+        "Przerwano w środkowym etapie. Kara umiarkowana: 50 klapsów pasem i 5 minut stania w kącie.",
+        "Utrata sił w połowie drogi! Kara: 60 uderzeń różowym pejczem na stojąco w obcasach.",
+        "Złamanie rygoru średniego! Kara: 45 klapsów ogonem szczura oraz 4 minuty klęczenia.",
+        "Odrzucenie wyzwania nr 4-6! Kara: 55 uderzeń czarnym pejczem z rękami skutymi z przodu.",
+        "Przerwanie po udanym początku! Kara: 40 klapsów dłonią i chwila rozprężenia w obroży."
+      ];
+
+      var penaltiesLevel7_9 = [
+        "Dotarłaś bardzo daleko! Łagodna korekta: tylko 15 delikatnych klapsów dłonią.",
+        "Prawie się udało! Drobne potknięcie pod koniec: 20 klapsów różowym pejczem.",
+        "Zmęczenie materiału tuż przed metą. Kara: 10 uderzeń ogonem szczura i krótki odpoczynek.",
+        "Ostatnia prosta okazała się za trudna. Kara: 25 łagodnych klapsów na kolanach.",
+        "Potknięcie na przedostatnim kroku. Kara: 12 lekkich uderzeń dłonią."
+      ];
+
       function getRandom(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
       }
@@ -407,7 +448,6 @@
           document.getElementById("resText").innerText = finalText;
           document.getElementById("modifierDisplay").innerText = getRandom(modifiers);
 
-          // Automatyczne ustawienie stopera na wylosowany czas
           if (timerInterval) {
             clearInterval(timerInterval);
             timerInterval = null;
@@ -421,23 +461,22 @@
         document.getElementById("drawPenaltyBtn").onclick = function() {
           var title = "";
           var desc = "";
-          var tool = getRandom(spankingTools);
 
           if (completedTasksCount === 0) {
             title = "🚨 MAKSYMALNA KARA (Porażka przed pierwszym zadaniem!)";
-            desc = "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów (narzędzie: " + tool + ") w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.";
+            desc = getRandom(penaltiesLevel0);
           } else if (completedTasksCount === 1) {
             title = "⚡ SUPER SUROWA KARA (Mnożnik 5x)";
-            desc = "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów (narzędzie: " + tool + ") ze skutymi rękami za plecami.";
+            desc = getRandom(penaltiesLevel1);
           } else if (completedTasksCount >= 2 && completedTasksCount <= 3) {
             title = "⚠️ SUROWA KARA (Mnożnik 4x)";
-            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara 4x: 90 klapsów (narzędzie: " + tool + ") w pełnym unieruchomieniu.";
+            desc = getRandom(penaltiesLevel2_3);
           } else if (completedTasksCount >= 4 && completedTasksCount <= 6) {
             title = "⚖️ STANDARDOWA KARA (Mnożnik 3x - 2x)";
-            desc = "Przerwano po " + completedTasksCount + " zadaniach. Kara umiarkowana: 50 klapsów (narzędzie: " + tool + ") i 5 minut stania w kącie.";
+            desc = getRandom(penaltiesLevel4_6);
           } else if (completedTasksCount >= 7 && completedTasksCount <= 9) {
             title = "🍃 ŁAGODNA KARA (Mnożnik 1x)";
-            desc = "Dotarłaś bardzo daleko (" + completedTasksCount + " zadań)! Łagodna korekta: tylko 15 delikatnych klapsów (narzędzie: dłoń).";
+            desc = getRandom(penaltiesLevel7_9);
           } else {
             title = "👑 BRAK KARY (Ukończono 10+ zadań!)";
             desc = "Wykonałaś już " + completedTasksCount + " zadań! Twój rygor został w pełni zaliczony – brak jakiejkolwiek kary. Jesteś wolna lub możesz kontynuować sesję!";
