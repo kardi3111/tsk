@@ -128,15 +128,321 @@
       color: white;
     }
 
-    .wheel-container {
+    .wheel-visual {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent-purple) 0deg 90deg, var(--accent-magenta) 90deg 180deg, #4a0e4e 180deg 270deg, #bd1e70 270deg 360deg);
+      border: 4px solid var(--accent-gold);
+      box-shadow: 0 0 20px rgba(139, 18, 168, 0.6);
+      margin: 0 auto 15px auto;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      position: relative;
+      justify-content: center;
+      transition: transform 3s cubic-bezier(0.15, 0.9, 0.2, 1);
     }
 
-    canvas#wheel {
-      width: 260px;
-      height: 260px;
+    .wheel-inner {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-main);
       border-radius: 50%;
-      box-shadow: 0 0
+      border: 2px solid var(--accent-gold);
+    }
+
+    .result-box {
+      background: rgba(10, 6, 13, 0.9);
+      border: 1px dashed var(--accent-magenta);
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .result-category {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+
+    .result-text { font-size: 1.05rem; line-height: 1.5; color: var(--text-main); }
+
+    .result-meta {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(224, 37, 133, 0.2);
+      border: 1px solid var(--accent-magenta);
+    }
+
+    .badge-rigor {
+      background: rgba(217, 37, 37, 0.3);
+      border: 1px solid var(--accent-red);
+      color: #ff8080;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .timer-display {
+      font-size: 2rem;
+      font-family: monospace;
+      color: var(--accent-gold);
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .timer-controls { display: flex; gap: 8px; }
+
+    .outfit-details { font-size: 0.85rem; line-height: 1.6; }
+    .outfit-details li { margin-left: 18px; margin-bottom: 4px; }
+
+    .vault-list {
+      max-height: 220px;
+      overflow-y: auto;
+      margin-top: 10px;
+      border: 1px solid var(--border-card);
+      border-radius: 6px;
+    }
+
+    .vault-item {
+      padding: 8px;
+      font-size: 0.8rem;
+      border-bottom: 1px solid rgba(180, 80, 150, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .modifier-box {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(224, 37, 133, 0.1);
+      border: 1px solid var(--accent-magenta);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--accent-gold);
+      text-align: center;
+    }
+
+    .penalty-box {
+      margin-top: 10px;
+      padding: 12px;
+      background: rgba(217, 37, 37, 0.15);
+      border: 1px solid var(--accent-red);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #ff9999;
+      text-align: center;
+    }
+
+    .history-list {
+      margin-top: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+    }
+    .history-item {
+      padding: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .history-item.done {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Generator Zadań, Kar i Rygoru Solo</h1>
+    <p class="subtitle">300 Wyzwań • Bielizna, Obroże, Szale i Narzędzia</p>
+  </header>
+
+  <div class="container">
+    <div class="left-panel" style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="card">
+        <h2>Filtracja i Ustawienia Rygoru</h2>
+        <div class="filter-group">
+          <label for="categorySelect">Kategoria Wyzwania</label>
+          <select id="categorySelect">
+            <option value="ALL">Wszystkie Kategorie (300)</option>
+            <option value="feminizacja">1. Sukienki, Spódnice i Pełna Feminizacja (75)</option>
+            <option value="sensoryka">2. Sensoryka i Unieruchomienie Solo (75)</option>
+            <option value="postawa">3. Postawa, Balans i Fitness w Szpilkach (75)</option>
+            <option value="sluzbalczosc">4. Służalczość, Porządki i Rutyna Solo (75)</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="intensitySelect">Poziom Bazy Zadań</label>
+          <select id="intensitySelect">
+            <option value="ALL">Wszystkie Poziomy</option>
+            <option value="Lekki">Lekki</option>
+            <option value="Wymagający">Wymagający</option>
+            <option value="Rygorystyczny">Rygorystyczny</option>
+          </select>
+        </div>
+
+        <label class="checkbox-container">
+          <input type="checkbox" id="enableModifiers" checked>
+          <span>Modyfikatory BDSM / Sensoryczne</span>
+        </label>
+
+        <label class="checkbox-container" style="color: #ff8080;">
+          <input type="checkbox" id="extremeRigor">
+          <span>Tryb "Bezwzględny Rygor" (Klapsy x3)</span>
+        </label>
+
+        <button class="btn" id="spinBtn">Zakręć Kołem Fortuny</button>
+        <button class="btn btn-secondary" id="quickDrawBtn">Szybkie Losowanie Zadania</button>
+        <button class="btn btn-danger" id="drawPenaltyBtn">Losuj Karę za Błąd! (1-30)</button>
+      </div>
+
+      <div class="card">
+        <h2>Pełna Stylizacja Solo</h2>
+        <button class="btn btn-secondary" id="generateOutfitBtn">Wygeneruj Zestaw Strój</button>
+        <div id="outfitBox" class="outfit-details" style="margin-top: 10px;">
+          <p style="color: var(--text-muted); text-align: center;">Kliknij przycisk, aby wylosować kompletny strój.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel" style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="card" style="text-align: center;">
+        <div class="wheel-visual" id="wheelVisual">
+          <div class="wheel-inner"></div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+          <div class="result-category" id="resCategory">Gotowy do Losowania</div>
+          <div class="result-text" id="resText">Zakręć kołem, wylosuj zadanie lub wymierz karę za nieposłuszeństwo.</div>
+          
+          <div id="modifierDisplay" class="modifier-box" style="display: none;"></div>
+          <div id="penaltyDisplay" class="penalty-box" style="display: none;"></div>
+
+          <div class="result-meta" id="resMeta" style="display: none;">
+            <span class="badge" id="resIntensity">Lekki</span>
+            <span class="badge" id="resTime">10 min</span>
+            <span class="badge badge-rigor" id="resRigor" style="display: none;">Rygor x3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2>Stoper Odliczający</h2>
+          <div class="timer-display" id="timerDisplay">00:00</div>
+          <div class="timer-controls">
+            <button class="btn btn-secondary" id="startTimerBtn">Start</button>
+            <button class="btn btn-secondary" id="pauseTimerBtn">Pauza</button>
+            <button class="btn btn-secondary" id="resetTimerBtn">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Historia Wyzwań i Kar</h2>
+          <div class="history-list" id="historyList">
+            <p style="color: var(--text-muted); text-align: center; padding-top: 20px;">Brak wpisów w tej sesji.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Baza Zadań (<span id="taskCountDisplay">300</span>)</h2>
+        <input type="text" id="searchInput" placeholder="Szukaj (np. obroża, packa, ogon szczura, szal)...">
+        <div class="vault-list" id="vaultList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const clapCounts = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100];
+      
+      const spankingTools = ["czarna packa", "różowa packa", "ogon szczura", "dłoń"];
+      const collars = ["posture collar", "standard collar", "brak obroży"];
+      const bras = ["sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "brak biustonosza"];
+      const panties = ["ciasne stringi", "figi", "brak majtek"];
+      const scarfCounts = ["bez szalika", "1 szalik", "2 szaliki", "3 szaliki", "4 szaliki naraz"];
+      const pastiesTypes = ["clover clamps", "spinacze z ciężarkami", "okrągłe naklejki z łańcuszkiem", "zaciski klamrowe", "metalowe klipsy"];
+      const lowerLayers = ["grube czarne rajstopy (100D)", "prześwitujące czarne rajstopy", "dopasowane elastyczne legginsy", "rajstopy ze szwem z tyłu"];
+      const dresses = ["sukienkę bodycon", "sukienkę maxi", "rozkloszowaną spódnicę i bluzkę", "ołówkową spódnicę", "kwiatową sukienkę", "małą czarną", "sukienkę midi", "dzianinową sukienkę"];
+
+      const exerciseTypes = [
+        "chodzenie w szpilkach po prostej linii kafelków z książką na głowie",
+        "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
+        "trzymanie głębokiego przysiadu w szpilkach i sukience",
+        "wykonanie powolnych zakroków z zachowaniem idealnej postawy",
+        "utrzymanie pozycji 'jaskółki' (balans na jednej nodze) w szpilkach",
+        "poruszanie się na kolanach ze skrzyżowanymi kostkami z tyłu",
+        "wykonanie serii eleganckich przysiadów przy ścianie"
+      ];
+
+      const modifiers = [
+        "Modyfikator BDSM: Całkowity gag/knebel w ustach przez cały czas trwania zadania.",
+        "Modyfikator BDSM: Ciasne opasanie twarzy i ust szalem.",
+        "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold) – wykonaj zadanie w ciemności.",
+        "Modyfikator BDSM: Ręce uwiązane lub mocno trzymane skrzyżowane na plecach.",
+        "Modyfikator Estetyczny: Pomaluj paznokcie na głęboki czerwony kolor.",
+        "Modyfikator Rygoru: Liczenie każdego uderzenia na głos – błąd w liczeniu zeruje serię.",
+        "Modyfikator Milczenia: Bezgłośność – każdy jęk lub dźwięk nakłada +15 dodatkowych klapsów.",
+        "Modyfikator Postawy: Obowiązkowa obroża posture collar zaciągnięta wysoko na szyi."
+      ];
+
+      const penalties = [
+        "KARA #1: Natychmiastowe 50 klapsów narzędziem: czarna packa na stojąco.",
+        "KARA #2: 5 minut klęczenia z obrożą posture collar i kneblem w ustach.",
+        "KARA #3: Wykonanie 30 głębokich ukłonów w szpilkach, z serią 5 klapsów narzędziem: różowa packa.",
+        "KARA #4: Nałożenie 4 szalików na raz jako wyciszenie/blindfold na kolejne 15 minut.",
+        "KARA #5: Seria 100 mocnych klapsów używając ogon szczura w pozycji uległej.",
+        "KARA #6: Stanie w bezruchu przy ścianie w obroży standard collar przez 10 minut.",
+        "KARA #7: Wymierzenie 75 klapsów czarną packą z odliczaniem każdego uderzenia.",
+        "KARA #8: Klęczenie na twardej podłodze w 3 szalikach przez 8 minut.",
+        "KARA #9: Nałożenie pełnego knebla i wykonanie 40 przysiadów w szpilkach.",
+        "KARA #10: Dopisanie 150 klapsów narzędziem: ogon szczura podzielonych na 3 równe serie.",
+        "KARA #11: Wytrzymanie w głębokim przysiadzie przy ścianie przez 3 minuty bez ruchu.",
+        "KARA #12: Trzymanie pozycji uległej na kolanach z obrożą posture collar przez 10 minut.",
+        "KARA #13: Zamknięcie oczu opaską i przyjęcie 60 klapsów różową packą.",
+        "KARA #14: Wykonanie 50 zakroków w obcisłej sukience z założonymi 2 szalikami.",
+        "KARA #15: Klęczenie z głową opartą o krzesło i przyjęcie serii 80 klapsów dłonią.",
+        "KARA #16: Całkowity zakaz ruchu przez 12 minut w pełnym usztywnieniu w obroży.",
+        "KARA #17: Poruszanie się wyłącznie na kolanach w 4 szalikach naraz przez 10 minut.",
+        "KARA #18: Wymierzenie sobie 200 klapsów (naprzemiennie czarna packa i ogon szczura).",
+        "KARA #19: Wytrzymanie w pełnym skłonie z dłońmi dotykającymi podłogi przez 5 minut.",
+        "KARA #20: Założenie gaga i przyjęcie 40 klapsów w prawe pośladki oraz 40 w lewe.",
+        "KARA #21: Chodzenie w obcasach z dłońmi uwiązanymi na plecach przez 15 minut.",
+        "KARA #22: Wykonanie 25 przysiadów w szpilkach z 3 szalikami owiniętymi na szyi.",
+        "KARA #23: Przyjęcie serii 90 klapsów narzędziem: różowa packa bez wydawania dźwię
