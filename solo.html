@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generator Zadań, Kar i Rygoru Solo (300 Zadań + 30 Kar)</title>
+  <title>Generator Zadań, Kar i Rygoru Solo</title>
   <style>
     :root {
       --bg-main: #0a060d;
@@ -293,7 +293,7 @@
 
   <header>
     <h1>Generator Zadań, Kar i Rygoru Solo</h1>
-    <p class="subtitle">300 Wyzwań • Baza 30 Kar • Potężny Rygor i Modyfikatory</p>
+    <p class="subtitle">300 Wyzwań • Dedykowana Bielizna, Obroże i Narzędzia Dyscypliny</p>
   </header>
 
   <div class="container">
@@ -340,7 +340,7 @@
         <h2>Pełna Stylizacja Solo</h2>
         <button class="btn btn-secondary" id="generateOutfitBtn">Wygeneruj Zestaw Strój</button>
         <div id="outfitBox" class="outfit-details" style="margin-top: 10px;">
-          <p style="color: var(--text-muted); text-align: center;">Kliknij przycisk, aby wylosować kompletny strój.</p>
+          <p style="color: var(--text-muted); text-align: center;">Kliknij przycisk, aby wylosować kompletny strój z uwzględnieniem obroży i ilości szali.</p>
         </div>
       </div>
     </div>
@@ -388,7 +388,7 @@
 
       <div class="card">
         <h2>Baza Zadań (<span id="taskCountDisplay">300</span>)</h2>
-        <input type="text" id="searchInput" placeholder="Szukaj (np. gag, blindfold, szal, stringi)...">
+        <input type="text" id="searchInput" placeholder="Szukaj (np. obroża, packa, ogon szczura, szal)...">
         <div class="vault-list" id="vaultList"></div>
       </div>
     </div>
@@ -396,447 +396,116 @@
 
   <script>
     const clapCounts = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100];
+    
+    // Narzędzia do klapsów
+    const spankingTools = [
+      "czarna packa",
+      "różowa packa",
+      "ogon szczura",
+      "dłoń"
+    ];
+
+    // Obroże
+    const collars = [
+      "posture collar",
+      "standard collar",
+      "brak obroży"
+    ];
+
+    // Biustonosze
+    const bras = [
+      "sportowy biustonosz",
+      "koronkowy biustonosz",
+      "biustonosz push-up",
+      "brak biustonosza"
+    ];
+
+    // Majtki
+    const panties = [
+      "ciasne stringi",
+      "figi",
+      "brak majtek"
+    ];
+
+    // Liczba szalików
+    const scarfCounts = [
+      "bez szalika",
+      "1 szalik",
+      "2 szaliki",
+      "3 szaliki",
+      "4 szaliki naraz"
+    ];
+
     const pastiesTypes = [
       "clover clamps",
       "spinacze z ciężarkami",
       "okrągłe naklejki z łańcuszkiem",
-      "zaciski klamrowe z dzwoneczkami",
-      "metalowe klipsy zaciskowe",
-      "silikonowe plasterki osłaniające"
-    ];
-    
-    const underwear = [
-      "ciasne koronkowe stringi",
-      "klasyczne figi z wysokim stanem",
-      "brak bielizny (gołe ciało pod spodem)",
-      "satynowe stringi z paseczkami na biodrach",
-      "bawełniane gładkie figi korygujące",
-      "prześwitujące koronkowe figi brazyliany",
-      "mocno wycięte stringi z bezszwowej dzianiny",
-      "modelujące majtki z podwyższonym stanem",
-      "koronkowe stringi z biżuteryjnym kółeczkiem"
+      "zaciski klamrowe",
+      "metalowe klipsy"
     ];
 
     const lowerLayers = [
       "grube czarne rajstopy (100D)",
-      "prześwitujące czarne rajstopy (20D)",
+      "prześwitujące czarne rajstopy",
       "dopasowane elastyczne legginsy",
-      "rajstopy kryjące ze szwem z tyłu",
-      "kryjące rajstopy w kolorze głębokiego matu (80D)",
-      "połyskujące eleganckie rajstopy wieczorowe",
-      "kabaretki o drobnym oczku",
-      "kabaretki o dużym oczku nakładane na gładkie rajstopy",
-      "rajstopy modelujące pośladki i talię",
-      "wzorzyste rajstopy w drobne kropki",
-      "zamszowe miękkie legginsy z wysokim stanem",
-      "rajstopy bezpalcowe wykończone koronką"
+      "rajstopy ze szwem z tyłu"
     ];
 
+    // Uproszczona baza sukienek
     const dresses = [
-      "obcisłą sukienkę bodycon",
-      "długą elegancką sukienkę maxi",
-      "rozkloszowaną spódnicę i dopasowaną bluzkę",
-      "ołówkową spódnicę z wysokim stanem",
-      "kwiatową sukienkę z głębokim dekoltem",
-      "satynową sukienkę typu slip dress",
-      "klasyczną małą czarną",
-      "welurową sukienkę midi z długim rękawem",
-      "asymetryczną sukienkę koktajlową",
-      "dzianinową sukienkę dopasowaną do sylwetki",
-      "plisowaną spódnicę maxi z elegancką koszulą",
-      "kopertową sukienkę z wiązaniem w talii",
-      "czerwoną sukienkę bodycon z odkrytymi ramionami",
-      "długą plisowaną spódnicę z głębokim rozcięciem",
-      "dopasowaną spódnicę jeansową z wysokim stanem",
-      "koronkową sukienkę z dłuższą podszewką",
-      "elegancki komplet: spódnica trapezowa i gorset",
-      "ciemnogranatową sukienkę koktajlową z dekoltem V",
-      "dzianinową dopasowaną maxi z golfem",
-      "satynową spódnicę ołówkową z rozcięciem z tyłu",
-      "prześwitującą zwiewną sukienkę w motywy roślinne",
-      "sukienkę wykończoną piórami przy dekolcie",
-      "skórzaną spódnicę midi o dopasowanym kroju",
-      "długą satynową spódnicę maxi w kolorze bordowym",
-      "sukienkę trapezową w stylu retro z paskiem",
-      "dopasowaną sukienkę prążkowaną na ramiączkach",
-      "sukienkę z bufiastymi rękawami i gorsetową górą",
-      "długą aksamitną suknię z odkrytymi plecami",
-      "spódnicę tiulową wielowarstwową z gładkim topem",
-      "dzianinową spódnicę z bocznym ściągaczem",
-      "sukienkę maxi w geometryczne wzory z wiązaniem",
-      "ołówkową sukienkę w kratkę z dopasowanym żakietem",
-      "sukienkę z głębokim wycięciem na plecach i stójką",
-      "rozkloszowaną sukienkę koszulową z paskiem",
-      "dopasowaną sukienkę brokatową z długim rękawem",
-      "elegancką spódnicę z falbanami i szyfonową bluzkę"
+      "sukienkę bodycon",
+      "sukienkę maxi",
+      "rozkloszowaną spódnicę i bluzkę",
+      "ołówkową spódnicę",
+      "kwiatową sukienkę",
+      "małą czarną",
+      "sukienkę midi",
+      "dzianinową sukienkę"
     ];
 
     const exerciseTypes = [
       "chodzenie w szpilkach po prostej linii kafelków z książką na głowie",
       "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
-      "trzymanie głębokiego przysiadu w szpilkach i obcisłej sukience",
+      "trzymanie głębokiego przysiadu w szpilkach i sukience",
       "wykonanie powolnych zakroków z zachowaniem idealnej postawy",
       "utrzymanie pozycji 'jaskółki' (balans na jednej nodze) w szpilkach",
       "poruszanie się na kolanach ze skrzyżowanymi kostkami z tyłu",
-      "wykonanie serii eleganckich przysiadów przy ścianie bez dotykania jej plecami",
-      "utrzymanie pozycji kucającej na samych palcach w obcasach przez 2 minuty",
-      "chodzenie z mocno złączonymi kolanami i dłońmi zaplecionymi na plecach",
-      "wykonanie serii 20 powolnych ukłonów przed lustrem z zatrzymaniem na dole",
-      "stanie w pełnej wyprostowanej pozycji ze złączonymi piętami przez 5 minut",
-      "klęczenie na piętach z książką na głowie bez możliwości poprawiania",
-      "wykonanie 15 głębokich przysiadów z dłońmi trzymanymi stale za głową",
-      "chodzenie powolnym krokiem wybiegowym z pełnym obrotem co trzy kroki",
-      "utrzymanie powolnego półprzysiadu przy ścianie z obcasami uniesionymi w górę",
-      "wykonanie zakroków w miejscu z pełnym wyprostem klatki piersiowej",
-      "powolne unoszenie się na palcach stóp w szpilkach z pauzą w najwyższym punkcie",
-      "chodzenie tyłem po wyznaczonej prostej linii bez patrzenia w dół",
-      "wykonanie ukłonu ukoronowanego wyprostem ramion i utrzymaniem balansu",
-      "utrzymanie nieruchomej pozycji uległej na kolanach z głową podniesioną wysoko",
-      "wykonanie serii naprzemiennych wykroków z zachowaniem prostopadłej sylwetki"
+      "wykonanie serii eleganckich przysiadów przy ścianie"
     ];
 
     const modifiers = [
       "Modyfikator BDSM: Całkowity gag/knebel w ustach przez cały czas trwania zadania.",
-      "Modyfikator BDSM: Ciasne opasanie twarzy i ust jesiennym szalem blanket scarf.",
+      "Modyfikator BDSM: Ciasne opasanie twarzy i ust szalem.",
       "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold) – wykonaj zadanie w ciemności.",
       "Modyfikator BDSM: Ręce uwiązane lub mocno trzymane skrzyżowane na plecach.",
-      "Modyfikator Estetyczny: Pomaluj paznokcie na głęboki czerwony kolor lub nałóż nową warstwę.",
-      "Modyfikator Rygoru: Każdy klaps wykonywany zamiennie dłonią i skórzaną paletką/pejczem.",
+      "Modyfikator Estetyczny: Pomaluj paznokcie na głęboki czerwony kolor.",
+      "Modyfikator Rygoru: Liczenie każdego uderzenia na głos – błąd w liczeniu zeruje serię.",
       "Modyfikator Milczenia: Bezgłośność – każdy jęk lub dźwięk nakłada +15 dodatkowych klapsów.",
-      "Modyfikator Postawy: Obowiązkowe poruszanie się wyłącznie na kolanach ze stykającymi się kostkami.",
-      "Modyfikator BDSM: Kneblowanie ust ciasno zaciągniętą chustą i nałożenie blindfolda.",
-      "Modyfikator Sensoryczny: Obowiązek wykonywania wszystkich ruchów ze spowolnieniem o połowę.",
-      "Modyfikator Rygoru: Dodatkowe 20 klapsów wymierzone w udach zaraz po zakończeniu serii głównej.",
-      "Modyfikator Postawy: Zakaz opierania się i siadania przez kolejne 30 minut po zadaniu.",
-      "Modyfikator Estetyczny: Nałożenie pełnego, mocnego makijażu ust głęboką czerwoną szminką.",
-      "Modyfikator BDSM: Założenie ciasnego kagańca/gaga pierścieniowego na całe wyzwanie.",
-      "Modyfikator Rygoru: Liczenie każdego klapsa na głos – błąd w liczeniu zeruje serię.",
-      "Modyfikator Sensoryczny: Założenie grubych rękawiczek ograniczających czucie w dłoniach.",
-      "Modyfikator Postawy: Trzymanie spiętych łopatek przez włożenie laski/szczotki za łokcie.",
-      "Modyfikator BDSM: Unieruchomienie nadgarstków z przodu ciasną taśmą lub opaską.",
-      "Modyfikator Milczenia: Zaciskanie zębów na materiale szala bez możliwości otwarcia ust.",
-      "Modyfikator Rygoru: Każdy klaps wymierzany z zatrzymaniem dłoni na 2 sekundy po uderzeniu.",
-      "Modyfikator Estetyczny: Dokładne pomalowanie paznokci u stóp na odcień burgundu.",
-      "Modyfikator Postawy: Wykonanie całego zadania na obcasach bez dotykania piętami podłogi.",
-      "Modyfikator Sensoryczny: Potrójne owinięcie głowy i szyi ciężkim kominem dzianinowym.",
-      "Modyfikator BDSM: Wykonanie zadania z dołączonymi klamrami skasowanymi na piersiach."
+      "Modyfikator Postawy: Obowiązkowa obroża posture collar zaciągnięta wysoko na szyi."
     ];
 
-    // Baza powiększona dokładnie do 30 kar
     const penalties = [
-      "KARA #1: Natychmiastowe 50 klapsów na stojąco bez podejmowania próby obrony.",
-      "KARA #2: 5 minut klęczenia ze skrzyżowanymi rękami na plecach i kneblem w ustach.",
-      "KARA #3: Wykonanie 30 głębokich ukłonów w szpilkach, z serią 3 klapsów po każdym ukłonie.",
-      "KARA #4: Nałożenie potrójnej warstwy szala na głowę/oczy jako blindfold na kolejne 15 minut.",
-      "KARA #5: Seria 100 mocnych klapsów paletką/pejczem w pełnej pozycji uległej na kolanach.",
-      "KARA #6: Stanie w bezruchu przy ścianie w obcasach ze złączonymi kolanami przez 10 minut.",
-      "KARA #7: Natychmiastowe wymierzenie 75 klapsów z wymuszonym odliczaniem każdego uderzenia.",
-      "KARA #8: Klęczenie na twardej podłodze z uniesionymi rękami w górę przez 8 minut.",
-      "KARA #9: Nałożenie pełnego knebla i wykonanie 40 dokładnych przysiadów w obcasach.",
-      "KARA #10: Dopisanie 150 klapsów podzielonych na 3 równe serie wykonywane bez przerwy.",
+      "KARA #1: Natychmiastowe 50 klapsów narzędziem: czarna packa na stojąco.",
+      "KARA #2: 5 minut klęczenia z obrożą posture collar i kneblem w ustach.",
+      "KARA #3: Wykonanie 30 głębokich ukłonów w szpilkach, z serią 5 klapsów narzędziem: różowa packa.",
+      "KARA #4: Nałożenie 4 szalików na raz jako wyciszenie/blindfold na kolejne 15 minut.",
+      "KARA #5: Seria 100 mocnych klapsów używając ogon szczura w pozycji uległej.",
+      "KARA #6: Stanie w bezruchu przy ścianie w obroży standard collar przez 10 minut.",
+      "KARA #7: Wymierzenie 75 klapsów czarną packą z odliczaniem każdego uderzenia.",
+      "KARA #8: Klęczenie na twardej podłodze w 3 szalikach przez 8 minut.",
+      "KARA #9: Nałożenie pełnego knebla i wykonanie 40 przysiadów w szpilkach.",
+      "KARA #10: Dopisanie 150 klapsów narzędziem: ogon szczura podzielonych na 3 równe serie.",
       "KARA #11: Wytrzymanie w głębokim przysiadzie przy ścianie przez 3 minuty bez ruchu.",
-      "KARA #12: Trzymanie pozycji uległej (twarz przy podłodze, pośladki w górze) przez 10 minut.",
-      "KARA #13: Zamknięcie oczu opaską i przyjęcie 60 klapsów paletką w pełnym milczeniu.",
-      "KARA #14: Wykonanie 50 zakroków na przemian w obcisłej sukience z ramionami w zgięciu.",
-      "KARA #15: Klęczenie z głową opartą o krzesło i przyjęcie serii 80 szybkich klapsów.",
-      "KARA #16: Całkowity zakaz ruchu i zmiany pozycji przez 12 minut w pełnym usztywnieniu.",
-      "KARA #17: Poruszanie się wyłącznie na kolanach po pokoju przez kolejne 10 minut.",
-      "KARA #18: Wymierzenie sobie 200 klapsów z podziałem dłoń / pejcz pod bezwzględnym rygorem.",
-      "KARA #19: Wytrzymanie w pełnym skłonie z dłońmi dotykającymi podłogi i opaską na oczach przez 5 minut.",
-      "KARA #20: Założenie gaga i przyjęcie 40 mocnych klapsów w prawe pośladki oraz 40 w lewe pośladki.",
-      "KARA #21: Chodzenie w obcasach po pokoju z dłońmi uwiązanymi na plecach przez 15 minut.",
-      "KARA #22: Wykonanie 25 pełnych przysiadów przy łóżku z opaską na oczach i szalem na głowie.",
-      "KARA #23: Przyjęcie serii 90 klapsów na stojąco z zakazem wydania jakiegokolwiek dźwięku.",
-      "KARA #24: Klęczenie na twardym podłożu z całkowicie prostymi plecami i głową uniesioną w górę przez 12 minut.",
-      "KARA #25: Wykonanie 60 powolnych ukłonów dworskich przed lustrem w pełnym stroju.",
-      "KARA #26: Natychmiastowa seria 120 klapsów wymierzana naprzemiennie dłonią i pejczem.",
-      "KARA #27: Trzymanie ciasnego gaga w ustach i wykonywanie ciągłego marszu w szpilkach przez 10 minut.",
-      "KARA #28: Przyjęcie 50 klapsów na kolanach, zmiana pozycji na stojącą i przyjęcie kolejnych 50 klapsów.",
-      "KARA #29: Wytrzymanie w bezruchu na krześle ze skrępowanymi dłońmi i blindfoldem przez kolejne 20 minut.",
-      "KARA #30: Bezwzględny Rygor Końcowy: Seria 250 mocnych klapsów na pośladki bez żadnych przerw."
-    ];
-
-    const defaultTasks = [
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[id % clapCounts.length];
-        const pasties = pastiesTypes[id % pastiesTypes.length];
-        const dress = dresses[id % dresses.length];
-        const und = underwear[id % underwear.length];
-        const low = lowerLayers[id % lowerLayers.length];
-        return {
-          id: `fem_${id}`,
-          category: "feminizacja",
-          baseClaps: claps,
-          text: `[Feminizacja #${id}] Załóż ${und}, na to ${low}, oraz ${dress}. Zamocuj ${pasties} i owiń szyję jesiennym szalem blanket scarf. Wykonaj ukłony przed lustrem, po czym wymierz wyznaczoną serię klapsów w pośladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "15 min",
-          active: true
-        };
-      }),
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[(id + 2) % clapCounts.length];
-        const pasties = pastiesTypes[(id + 1) % pastiesTypes.length];
-        const dress = dresses[(id + 1) % dresses.length];
-        const und = underwear[(id + 1) % underwear.length];
-        const low = lowerLayers[(id + 1) % lowerLayers.length];
-        return {
-          id: `sens_${id}`,
-          category: "sensoryka",
-          baseClaps: claps,
-          text: `[Sensoryka #${id}] Ubrana w ${und}, ${low}, ${dress}, opaskę na oczy (blindfold) oraz ${pasties}, wytrzymaj w całkowitym bezruchu na krześle, akcentując koniec wyznaczoną serią klapsów w pośladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "12 min",
-          active: true
-        };
-      }),
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[(id + 4) % clapCounts.length];
-        const pasties = pastiesTypes[id % pastiesTypes.length];
-        const dress = dresses[(id + 2) % dresses.length];
-        const und = underwear[(id + 2) % underwear.length];
-        const low = lowerLayers[(id + 2) % lowerLayers.length];
-        const ex = exerciseTypes[id % exerciseTypes.length];
-        return {
-          id: `post_${id}`,
-          category: "postawa",
-          baseClaps: claps,
-          text: `[Postawa #${id}] Ubrana w ${und}, ${low}, ${dress} oraz szpilki, zamocuj ${pasties}. Wykonaj wyzwanie: ${ex}, a na koniec wymierz wyznaczoną serię klapsów w pośladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "10 min",
-          active: true
-        };
-      }),
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[(id + 1) % clapCounts.length];
-        const pasties = pastiesTypes[(id + 1) % pastiesTypes.length];
-        const dress = dresses[(id + 3) % dresses.length];
-        const und = underwear[(id + 3) % underwear.length];
-        const low = lowerLayers[(id + 3) % lowerLayers.length];
-        return {
-          id: `sluz_${id}`,
-          category: "sluzbalczosc",
-          baseClaps: claps,
-          text: `[Służalczość #${id}] Ubrana w ${und}, ${low}, ${dress} i ${pasties}, wykonaj polerowanie obuwia lub czyszczenie na kolanach, wykonując po każdym etapie wyznaczoną serię klapsów w pośladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "20 min",
-          active: true
-        };
-      })
-    ];
-
-    let tasks = defaultTasks;
-    let currentRotation = 0;
-    let sessionHistory = [];
-
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-
-    function drawWheel() {
-      const filtered = getFilteredTasks();
-      const count = Math.min(filtered.length, 12);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (count === 0) return;
-
-      const arc = (Math.PI * 2) / count;
-      const colors = ['#8b12a8', '#e02585', '#4a0e4e', '#bd1e70'];
-
-      for (let i = 0; i < count; i++) {
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.beginPath();
-        ctx.moveTo(130, 130);
-        ctx.arc(130, 130, 120, i * arc, (i + 1) * arc);
-        ctx.fill();
-      }
-    }
-
-    function getFilteredTasks() {
-      const cat = document.getElementById('categorySelect').value;
-      const int = document.getElementById('intensitySelect').value;
-      return tasks.filter(t => t.active && (cat === 'ALL' || t.category === cat) && (int === 'ALL' || t.intensity === int));
-    }
-
-    function triggerSpin(animate = true) {
-      const pool = getFilteredTasks();
-      if (pool.length === 0) return alert("Brak zadań w wybranej kategorii.");
-
-      const spinBtn = document.getElementById('spinBtn');
-      spinBtn.disabled = true;
-
-      document.getElementById('penaltyDisplay').style.display = 'none';
-
-      const selected = pool[Math.floor(Math.random() * pool.length)];
-      const isExtreme = document.getElementById('extremeRigor').checked;
-      const finalClaps = isExtreme ? selected.baseClaps * 3 : selected.baseClaps;
-
-      if (animate) {
-        currentRotation += 1440 + Math.floor(Math.random() * 360);
-        canvas.style.transform = `rotate(${currentRotation}deg)`;
-      }
-
-      setTimeout(() => {
-        const taskTextWithClaps = selected.text.replace("wyznaczoną serię", `${finalClaps}`);
-        document.getElementById('resText').textContent = taskTextWithClaps;
-        document.getElementById('resCategory').textContent = selected.category.toUpperCase();
-        document.getElementById('resIntensity').textContent = selected.intensity;
-        document.getElementById('resTime').textContent = selected.time;
-        
-        const rigorBadge = document.getElementById('resRigor');
-        if (isExtreme) {
-          rigorBadge.style.display = 'inline-block';
-        } else {
-          rigorBadge.style.display = 'none';
-        }
-
-        document.getElementById('resMeta').style.display = 'flex';
-
-        const modDisplay = document.getElementById('modifierDisplay');
-        if (document.getElementById('enableModifiers').checked || isExtreme) {
-          const randomMod = modifiers[Math.floor(Math.random() * modifiers.length)];
-          modDisplay.textContent = randomMod;
-          modDisplay.style.display = 'block';
-        } else {
-          modDisplay.style.display = 'none';
-        }
-
-        const parsedTime = parseInt(selected.time);
-        if (!isNaN(parsedTime)) {
-          secondsLeft = parsedTime * 60;
-          updateTimerDisplay();
-        }
-
-        addToHistory(selected.id, selected.category, isExtreme ? "RYGOR x3" : selected.intensity);
-
-        spinBtn.disabled = false;
-      }, animate ? 3000 : 0);
-    }
-
-    document.getElementById('spinBtn').addEventListener('click', () => triggerSpin(true));
-    document.getElementById('quickDrawBtn').addEventListener('click', () => triggerSpin(false));
-
-    document.getElementById('drawPenaltyBtn').addEventListener('click', () => {
-      const randomPenalty = penalties[Math.floor(Math.random() * penalties.length)];
-      document.getElementById('resCategory').textContent = "EGM / KARA ZA BŁĄD";
-      document.getElementById('resText').textContent = "ZŁAMANO ZASADĘ LUB PRZERWANO ZADANIE!";
-      document.getElementById('modifierDisplay').style.display = 'none';
-      
-      const pDisplay = document.getElementById('penaltyDisplay');
-      pDisplay.textContent = randomPenalty;
-      pDisplay.style.display = 'block';
-
-      document.getElementById('resMeta').style.display = 'none';
-      addToHistory("KARA", "BŁĄD/PRZERWANIE", "SUROWA KARA");
-    });
-
-    document.getElementById('generateOutfitBtn').addEventListener('click', () => {
-      const scarfs = [
-        'Jesienny Szal Blanket Scarf', 
-        'Ciężka Chusta w Kratę', 
-        'Wielki Komin Dzianinowy',
-        'Miękki Szeroki Szal Akrylowy z Frędzlami',
-        'Ciężki Szal Wełniany w Stonowanej Tonacji',
-        'Ciepły Komin Dzianinowy o Splotach Warkoczowych',
-        'Pojemna Obszerna Chusta Poncho',
-        'Elegancki Gładki Szal Kaszmirowy',
-        'Długi Szal Kraciasty w Stylu Klasycznym'
-      ];
-      const shoes = [
-        'Szpilki 10 cm', 
-        'Eleganckie Czółenka na Obcasie', 
-        'Wysokie Botki na Obcasie',
-        'Szpilki Zamszowe z Paskiem Wokół Kostki',
-        'Klasyczne Czarne Szpilki Lakierowane 12 cm',
-        'Sandałki na Szpilce z Cienkimi Paskami',
-        'Wysokie Muszkieterki na Słupku',
-        'Czółenka na Szpilce ze Szpicem',
-        'Botki na Szpilce z Odkrytymi Palcami'
-      ];
-
-      const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-
-      document.getElementById('outfitBox').innerHTML = `
-        <ul>
-          <li><strong>Bielizna:</strong> ${pick(underwear)}</li>
-          <li><strong>Nogi:</strong> ${pick(lowerLayers)}</li>
-          <li><strong>Główny Strój:</strong> ${pick(dresses)}</li>
-          <li><strong>Akcesoria:</strong> ${pick(pastiesTypes)}</li>
-          <li><strong>Szal:</strong> ${pick(scarfs)}</li>
-          <li><strong>Obuwie:</strong> ${pick(shoes)}</li>
-        </ul>
-      `;
-    });
-
-    function addToHistory(id, cat, type) {
-      sessionHistory.unshift({ id, cat, type });
-      const container = document.getElementById('historyList');
-      container.innerHTML = '';
-      sessionHistory.slice(0, 5).forEach((t) => {
-        const div = document.createElement('div');
-        div.className = 'history-item';
-        div.innerHTML = `
-          <span>#${t.id}: ${t.cat} [${t.type}]</span>
-          <button style="padding:2px 6px; font-size:0.7rem; cursor:pointer;" onclick="this.parentElement.classList.toggle('done')">Zaliczone</button>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function renderVault() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const vault = document.getElementById('vaultList');
-      vault.innerHTML = '';
-      const filtered = tasks.filter(t => t.text.toLowerCase().includes(q));
-      filtered.slice(0, 30).forEach(t => {
-        const div = document.createElement('div');
-        div.className = 'vault-item';
-        div.textContent = t.text.replace("wyznaczoną serię", "określoną serię");
-        vault.appendChild(div);
-      });
-    }
-
-    document.getElementById('searchInput').addEventListener('input', renderVault);
-
-    let timerInterval = null;
-    let secondsLeft = 0;
-
-    function updateTimerDisplay() {
-      const m = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
-      const s = (secondsLeft % 60).toString().padStart(2, '0');
-      document.getElementById('timerDisplay').textContent = `${m}:${s}`;
-    }
-
-    document.getElementById('startTimerBtn').addEventListener('click', () => {
-      if (timerInterval) return;
-      if (secondsLeft === 0) secondsLeft = 15 * 60;
-      timerInterval = setInterval(() => {
-        if (secondsLeft > 0) {
-          secondsLeft--;
-          updateTimerDisplay();
-        } else {
-          clearInterval(timerInterval);
-          timerInterval = null;
-          alert("Czas wyzwania minął!");
-        }
-      }, 1000);
-    });
-
-    document.getElementById('pauseTimerBtn').addEventListener('click', () => {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    });
-
-    document.getElementById('resetTimerBtn').addEventListener('click', () => {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      secondsLeft = 0;
-      updateTimerDisplay();
-    });
-
-    drawWheel();
-    renderVault();
-  </script>
-</body>
-</html>
+      "KARA #12: Trzymanie pozycji uległej na kolanach z obrożą posture collar przez 10 minut.",
+      "KARA #13: Zamknięcie oczu opaską i przyjęcie 60 klapsów różową packą.",
+      "KARA #14: Wykonanie 50 zakroków w obcisłej sukience z założonymi 2 szalikami.",
+      "KARA #15: Klęczenie z głową opartą o krzesło i przyjęcie serii 80 klapsów dłonią.",
+      "KARA #16: Całkowity zakaz ruchu przez 12 minut w pełnym usztywnieniu w obroży.",
+      "KARA #17: Poruszanie się wyłącznie na kolanach w 4 szalikach naraz przez 10 minut.",
+      "KARA #18: Wymierzenie sobie 200 klapsów (naprzemiennie czarna packa i ogon szczura).",
+      "KARA #19: Wytrzymanie w pełnym skłonie z dłońmi dotykającymi podłogi przez 5 minut.",
+      "KARA #20: Założenie gaga i przyjęcie 40 klapsów w prawe pośladki oraz 40 w lewe.",
+      "KARA #21: Chodzenie w obcasach z dłońmi uwiązanymi na plecach przez 15 minut.",
+      "KARA #22: Wykonanie 25 przysiadów w szpilkach z 3 szalikami owiniętymi na szyi.",
+      "KARA #23: Przyjęcie serii 90 klapsów narzędziem: różowa packa bez wydawania dźwięku.",
+      "KARA #24
