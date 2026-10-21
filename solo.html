@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generator Zadań i Kar Solo (300 Zadań)</title>
+  <title>Generator Zadań, Kar i Rygoru Solo (300 Zadań + 30 Kar)</title>
   <style>
     :root {
       --bg-main: #0a060d;
@@ -12,6 +12,7 @@
       --accent-magenta: #e02585;
       --accent-purple: #8b12a8;
       --accent-gold: #dfb256;
+      --accent-red: #d92525;
       --text-main: #f3e9f5;
       --text-muted: #a692ab;
       --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -108,13 +109,23 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(224, 37, 133, 0.3);
       margin-bottom: 10px;
+      transition: transform 0.1s, opacity 0.2s;
     }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:active { transform: scale(0.98); }
 
     .btn-secondary {
       background: transparent;
       border: 1px solid var(--border-card);
       color: var(--text-muted);
       box-shadow: none;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #800000, var(--accent-red));
+      box-shadow: 0 4px 12px rgba(217, 37, 37, 0.4);
+      color: white;
     }
 
     .wheel-container {
@@ -130,6 +141,7 @@
       border-radius: 50%;
       box-shadow: 0 0 20px rgba(139, 18, 168, 0.4);
       margin-bottom: 15px;
+      transition: transform 3s cubic-bezier(0.15, 0.9, 0.2, 1);
     }
 
     .pointer {
@@ -164,300 +176,182 @@
       margin-bottom: 8px;
     }
 
-    .result-text { font-size: 1.05rem; line-height: 1.5; color: var(--text-main); }
+    .result-text { font-size: 1.05rem; line-height: 1.5; color: var(--text<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Zadań, Kar i Rygoru Solo (300 Zadań + 30 Kar)</title>
+  <style>
+    :root {
+      --bg-main: #0a060d;
+      --bg-card: rgba(26, 15, 31, 0.85);
+      --border-card: rgba(180, 80, 150, 0.25);
+      --accent-magenta: #e02585;
+      --accent-purple: #8b12a8;
+      --accent-gold: #dfb256;
+      --accent-red: #d92525;
+      --text-main: #f3e9f5;
+      --text-muted: #a692ab;
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-    .result-meta {
-      margin-top: 12px;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(139, 18, 168, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(224, 37, 133, 0.12) 0%, transparent 40%);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header { text-align: center; margin-bottom: 25px; }
+
+    h1 {
+      font-size: 2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-magenta);
+      text-shadow: 0 0 12px rgba(224, 37, 133, 0.4);
+      margin-bottom: 8px;
+    }
+
+    p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+
+    @media (min-width: 900px) {
+      .container { grid-template-columns: 320px 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-card);
+      padding-bottom: 8px;
+    }
+
+    .filter-group { margin-bottom: 15px; }
+    .filter-group label {
+      display: block;
       font-size: 0.8rem;
       color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      background: rgba(10, 6, 13, 0.8);
+      border: 1px solid var(--border-card);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-magenta));
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(224, 37, 133, 0.3);
+      margin-bottom: 10px;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-card);
+      color: var(--text-muted);
+      box-shadow: none;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #800000, var(--accent-red));
+      box-shadow: 0 4px 12px rgba(217, 37, 37, 0.4);
+      color: white;
+    }
+
+    .wheel-container {
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
 
-    .badge {
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: rgba(224, 37, 133, 0.2);
-      border: 1px solid var(--accent-magenta);
+    canvas#wheel {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(139, 18, 168, 0.4);
+      margin-bottom: 15px;
+      transition: transform 3s cubic-bezier(0.15, 0.9, 0.2, 1);
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+    .pointer {
+      position: absolute;
+      top: 5px;
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 24px solid var(--accent-gold);
+      z-index: 10;
+    }
+
+    .result-box {
+      background: rgba(10, 6, 13, 0.9);
+      border: 1px dashed var(--accent-magenta);
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
       margin-top: 15px;
     }
 
-    .timer-display {
-      font-size: 2rem;
-      font-family: monospace;
-      color: var(--accent-gold);
-      text-align: center;
-      margin: 10px 0;
-    }
-
-    .timer-controls { display: flex; gap: 8px; }
-
-    .outfit-details { font-size: 0.85rem; line-height: 1.6; }
-    .outfit-details li { margin-left: 18px; margin-bottom: 4px; }
-
-    .vault-list {
-      max-height: 220px;
-      overflow-y: auto;
-      margin-top: 10px;
-      border: 1px solid var(--border-card);
-      border-radius: 6px;
-    }
-
-    .vault-item {
-      padding: 8px;
+    .result-category {
       font-size: 0.8rem;
-      border-bottom: 1px solid rgba(180, 80, 150, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>Generator Zadań i Kar Solo</h1>
-    <p class="subtitle">300 Wyzwań z Pełną Damską Garderobą i spankingiem</p>
-  </header>
-
-  <div class="container">
-    <div class="left-panel" style="display: flex; flex-direction: column; gap: 20px;">
-      <div class="card">
-        <h2>Filtracja Zadań</h2>
-        <div class="filter-group">
-          <label for="categorySelect">Kategoria</label>
-          <select id="categorySelect">
-            <option value="ALL">Wszystkie Kategorie (300)</option>
-            <option value="feminizacja">1. Sukienki, Spódnice i Feminizacja (75)</option>
-            <option value="sensoryka">2. Sensoryka i Unieruchomienie Solo (75)</option>
-            <option value="postawa">3. Postawa, Fitness i Dyscyplina Solo (75)</option>
-            <option value="sluzbalczosc">4. Służalczość, Porządki i Rutyna Solo (75)</option>
-          </select>
-        </div>
-
-        <div class="filter-group">
-          <label for="intensitySelect">Poziom Intensywności</label>
-          <select id="intensitySelect">
-            <option value="ALL">Wszystkie Poziomy</option>
-            <option value="Lekki">Lekki</option>
-            <option value="Wymagający">Wymagający</option>
-            <option value="Rygorystyczny">Rygorystyczny</option>
-          </select>
-        </div>
-
-        <button class="btn" id="spinBtn">Zakręć Kołem</button>
-        <button class="btn btn-secondary" id="quickDrawBtn">Szybkie Losowanie</button>
-      </div>
-
-      <div class="card">
-        <h2>Pełna Stylizacja Solo</h2>
-        <button class="btn btn-secondary" id="generateOutfitBtn">Wygeneruj Zestaw</button>
-        <div id="outfitBox" class="outfit-details" style="margin-top: 10px;">
-          <p style="color: var(--text-muted); text-align: center;">Kliknij przycisk, aby wylosować pełny strój.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="right-panel" style="display: flex; flex-direction: column; gap: 20px;">
-      <div class="card" style="text-align: center;">
-        <div class="wheel-container">
-          <div class="pointer"></div>
-          <canvas id="wheel" width="260" height="260"></canvas>
-        </div>
-
-        <div class="result-box" id="resultBox">
-          <div class="result-category" id="resCategory">Gotowy do Losowania</div>
-          <div class="result-text" id="resText">Zakręć kołem lub wybierz szybkie losowanie.</div>
-          <div class="result-meta" id="resMeta" style="display: none;">
-            <span class="badge" id="resIntensity">Lekki</span>
-            <span class="badge" id="resTime">10 min</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <h2>Stoper Odliczający</h2>
-          <div class="timer-display" id="timerDisplay">00:00</div>
-          <div class="timer-controls">
-            <button class="btn btn-secondary" id="startTimerBtn">Start</button>
-            <button class="btn btn-secondary" id="pauseTimerBtn">Pauza</button>
-            <button class="btn btn-secondary" id="resetTimerBtn">Reset</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Baza Zadań (<span id="taskCountDisplay">300</span>)</h2>
-          <input type="text" id="searchInput" placeholder="Szukaj (np. sukienka, spódnica, szal)...">
-          <div class="vault-list" id="vaultList"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const clapCounts = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100];
-    const pastiesTypes = ["clover clamps", "spinacze"];
-const dresses = [
-  "obcisłą sukienkę bodycon",
-  "długą elegancką sukienkę maxi",
-  "rozkloszowaną spódnicę i dopasowaną bluzkę",
-  "ołówkową spódnicę z wysokim stanem",
-  "kwiatową sukienkę z głębokim dekoltem",
-  "satynową sukienkę typu slip dress",
-  "klasyczną małą czarną",
-  "welurową sukienkę midi z długim rękawem",
-  "asymetryczną sukienkę koktajlową",
-  "dzianinową sukienkę dopasowaną do sylwetki",
-  "plisowaną spódnicu maxi z elegancką koszulą",
-  "kopertową sukienkę z wiązaniem w talii"
-];
-
-    const defaultTasks = [
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[id % clapCounts.length];
-        const pasties = pastiesTypes[id % 2];
-        const dress = dresses[id % dresses.length];
-        return {
-          id: `fem_${id}`,
-          category: "feminizacja",
-          text: `[Feminizacja #${id}] Załóż ${dress}, grube rajstopy (100D), zamocuj ${pasties} oraz jesienny szal blanket scarf. Wykonaj ukłony przed lustrem i serię ${claps} klapsow w posladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "15 min",
-          active: true
-        };
-      }),
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[(id + 2) % clapCounts.length];
-        const pasties = pastiesTypes[(id + 1) % 2];
-        const dress = dresses[(id + 1) % dresses.length];
-        return {
-          id: `sens_${id}`,
-          category: "sensoryka",
-          text: `[Sensoryka #${id}] Ubrana w ${dress}, opaskę na oczy oraz ${pasties}, wytrzymaj w całkowitym bezruchu na krześle, akcentując koniec serią ${claps} klapsow w posladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "12 min",
-          active: true
-        };
-      }),
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[(id + 4) % clapCounts.length];
-        const pasties = pastiesTypes[id % 2];
-        const dress = dresses[(id + 2) % dresses.length];
-        return {
-          id: `post_${id}`,
-          category: "postawa",
-          text: `[Postawa #${id}] Ubrana w ${dress} oraz szpilki, zamocuj ${pasties} i wykonaj krzesełko przy ścianie lub przysiady z zachowaniem idealnej postawy, kończąc serią ${claps} klapsow w posladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "10 min",
-          active: true
-        };
-      }),
-      ...Array.from({length: 75}, (_, i) => {
-        const id = i + 1;
-        const claps = clapCounts[(id + 1) % clapCounts.length];
-        const pasties = pastiesTypes[(id + 1) % 2];
-        const dress = dresses[(id + 3) % dresses.length];
-        return {
-          id: `sluz_${id}`,
-          category: "sluzbalczosc",
-          text: `[Służalczość #${id}] Ubrana w ${dress}, rajstopy i ${pasties}, wykonaj polerowanie obuwia lub czyszczenie na kolanach, wykonując po każdym etapie ${claps} klapsow w posladki.`,
-          intensity: id <= 25 ? "Lekki" : (id <= 55 ? "Wymagający" : "Rygorystyczny"),
-          time: "20 min",
-          active: true
-        };
-      })
-    ];
-
-    let tasks = defaultTasks;
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-
-    function drawWheel() {
-      const filtered = getFilteredTasks();
-      const count = Math.min(filtered.length, 12);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (count === 0) return;
-
-      const arc = (Math.PI * 2) / count;
-      const colors = ['#8b12a8', '#e02585', '#4a0e4e', '#bd1e70'];
-
-      for (let i = 0; i < count; i++) {
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.beginPath();
-        ctx.moveTo(130, 130);
-        ctx.arc(130, 130, 120, i * arc, (i + 1) * arc);
-        ctx.fill();
-      }
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
     }
 
-    function getFilteredTasks() {
-      const cat = document.getElementById('categorySelect').value;
-      const int = document.getElementById('intensitySelect').value;
-      return tasks.filter(t => t.active && (cat === 'ALL' || t.category === cat) && (int === 'ALL' || t.intensity === int));
-    }
-
-    document.getElementById('spinBtn').addEventListener('click', () => {
-      const pool = getFilteredTasks();
-      if (pool.length === 0) return alert("Brak zadań.");
-      const selected = pool[Math.floor(Math.random() * pool.length)];
-      document.getElementById('resText').textContent = selected.text;
-      document.getElementById('resCategory').textContent = selected.category.toUpperCase();
-      document.getElementById('resIntensity').textContent = selected.intensity;
-      document.getElementById('resTime').textContent = selected.time;
-      document.getElementById('resMeta').style.display = 'flex';
-    });
-
-    document.getElementById('quickDrawBtn').addEventListener('click', () => {
-      document.getElementById('spinBtn').click();
-    });
-
-    document.getElementById('generateOutfitBtn').addEventListener('click', () => {
-      const mainGarment = ['Sukienka Bodycon', 'Sukienka Maxi', 'Rozkloszowana Spódnica + Bluzka', 'Spódnica Ołówkowa + Corset'];
-      const tights = ['Rajstopy Kryjące 100D', 'Rajstopy 80D Czarne', 'Kabaretki', 'Rajstopy ze Szwem'];
-      const pasties = ['clover clamps', 'spinacze'];
-      const scarfs = ['Jesienny Szal Blanket Scarf', 'Ciężka Chusta w Kratę', 'Wielki Komin Dzianinowy'];
-      const shoes = ['Szpilki 10 cm', 'Eleganckie Czółenka na Obcasie'];
-
-      const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-
-      document.getElementById('outfitBox').innerHTML = `
-        <ul>
-          <li><strong>Główny Strój:</strong> ${pick(mainGarment)}</li>
-          <li><strong>Baza:</strong> ${pick(tights)}</li>
-          <li><strong>Naklejki:</strong> ${pick(pasties)}</li>
-          <li><strong>Szal:</strong> ${pick(scarfs)}</li>
-          <li><strong>Obuwie:</strong> ${pick(shoes)}</li>
-        </ul>
-      `;
-    });
-
-    function renderVault() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const vault = document.getElementById('vaultList');
-      vault.innerHTML = '';
-      const filtered = tasks.filter(t => t.text.toLowerCase().includes(q));
-      filtered.slice(0, 30).forEach(t => {
-        const div = document.createElement('div');
-        div.className = 'vault-item';
-        div.textContent = t.text;
-        vault.appendChild(div);
-      });
-    }
-
-    document.getElementById('searchInput').addEventListener('input', renderVault);
-
-    drawWheel();
-    renderVault();
-  </script>
-</body>
-</html>
+    .result-text { font-size: 1.05rem; line-height: 1.5; color: var(--text
