@@ -81,4 +81,266 @@
       const clapCounts = [10, 15, 20, 25, 30, 40, 50, 75, 100];
 
       // 20 Narzędzi karcenia
-      const spankingTools =
+      const spankingTools = [
+        "czarna packa", "różowa packa", "ogon szczura", "dłoń", "szeroki skórzany pas",
+        "wąski skórzany pasek", "paletka drewniana", "wylepiany pejczer", "whip/pejcz rzemienny",
+        "skórzana klapsówka z frędzlami", "paletka z otworami powietrznymi", "ciężka paczka z uchwytem",
+        "gumowa paletka treningowa", "płaska paczka skórzana", "sztywna paczka welurowa",
+        "zgięty pasek parciany", "dłoń w skórzanej rękawiczce", "podwójna paczka lakierowana",
+        "podłużny pasek z klamrą", "zbieżna miotełka skórzana"
+      ];
+
+      // 20 Obroży
+      const collars = [
+        "posture collar", "standard collar", "brak obroży", "wysoka obroża usztywniająca z ringiem",
+        "szeroka obroża skórzana z klamrą", "obroża z metalowym kółkiem z przodu", "obroża z miękkim wyściełaniem",
+        "obroża lakierowana czarna", "obroża różowa z ćwiekami", "obroża z miejscem na smycz",
+        "obroża z dołączonym gagem", "obroża usztywniana z zamkiem", "obroża ciasno dopasowana z paskiem",
+        "obroża z uszkami bocznymi", "obroża z podwójną klamrą", "obroża z łańcuszkiem dekoracyjnym",
+        "obroża aksamitna z pierścieniem", "obroża skórzana ze sprzączką z tyłu", "obroża usztywniana do brody", "obroża z dzwoneczkiem"
+      ];
+
+      // 20 Biustonoszy
+      const bras = [
+        "sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "brak biustonosza",
+        "biustonosz usztywniany z fiszbinami", "biustonosz miękki bez fiszbin", "biustonosz bawełniany",
+        "biustonosz gładki czarny", "biustonosz z paskami na dekolcie", "biustonosz koronkowy bralette",
+        "biustonosz usztywniany typu balconette", "biustonosz czerwony satynowy", "biustonosz z głębokim wycięciem",
+        "biustonosz bez ramiączek", "biustonosz zapinany z przodu", "biustonosz półprzezroczysty",
+        "biustonosz gorsetowy krótki", "biustonosz modelujący", "biustonosz sportowy z szeroką gumą", "biustonosz bezszwowy"
+      ];
+
+      // 20 Majtek
+      const panties = [
+        "ciasne stringi", "figi", "brak majtek", "stringi koronkowe z wysokim stanem",
+        "figi bezszwowe", "stringi z paskami na biodrach", "figi kryjące bawełniane",
+        "stringi satynowe", "figi brazyliany", "stringi bezszwowe", "figi z wysokim stanem modelujące",
+        "stringi z rozcięciem", "figi z prześwitującą siateczką", "stringi różowe koronkowe",
+        "figi mocno wycięte", "stringi bawełniane", "figi satynowe z kokardką", "stringi z biżuteryjnym kółkiem",
+        "figi koronkowe czerwone", "stringi z gumką w talii"
+      ];
+
+      // 20 Opcji szalika
+      const scarfCounts = [
+        "bez szalika", "1 szalik", "2 szaliki", "3 szaliki", "4 szaliki naraz",
+        "1 ciężki szal blanket scarf", "2 grube szale owinięte ciasno", "1 komin dzianinowy",
+        "2 kominy dzianinowe nakładane na siebie", "1 chusta w kratę", "2 chusty spięte na szyi",
+        "3 szale owinięte wokół twarzy", "1 długa dzianinowa chusta", "2 szale acryliki z frędzlami",
+        "1 duży szal kaszmirowy", "3 szale unieruchamiające szyję", "4 szale owinięte po głowę",
+        "1 szal szczelnie zakrywający usta", "2 szale spięte pasem", "3 ciężkie szale dzianinowe"
+      ];
+
+      // 20 Dolnych warstw
+      const lowerLayers = [
+        "grube czarne rajstopy (100D)", "prześwitujące czarne rajstopy", "dopasowane elastyczne legginsy",
+        "rajstopy ze szwem z tyłu", "rajstopy kryjące 80D", "rajstopy błyszczące wieczorowe",
+        "kabaretki o drobnym oczku", "kabaretki o dużym oczku", "legginsy zamszowe",
+        "rajstopy w drobne kropki", "rajstopy bezpalcowe", "rajstopy ze szwem i wzorem",
+        "rajstopy wzorzyste geometryczne", "legginsy błyszczące", "rajstopy kryjące cieliste",
+        "rajstopy modelujące pośladki", "kabaretki założone na gładkie rajstopy", "rajstopy matowe 60D",
+        "legginsy z wysokim stanem", "rajstopy czarne z połyskiem"
+      ];
+
+      // 20 Stroi/Sukienek
+      const dresses = [
+        "sukienkę bodycon", "sukienkę maxi", "rozkloszowaną spódnicę i bluzkę", "ołówkową spódnicę",
+        "kwiatową sukienkę", "małą czarną", "sukienkę midi", "dzianinową sukienkę",
+        "czerwoną sukienkę bodycon", "plisowaną spódnicę maxi", "skórzaną spódnicę ołówkową",
+        "satynową sukienkę slip dress", "sukienkę kopertową z wiązaniem", "sukienkę z głębokim dekoltem",
+        "elegancki komplet ze spódnicą", "sukienkę w kratkę", "sukienkę z golfem dopasowaną",
+        "spódnicę tiulową z topem", "sukienkę z rozcięciem na udzie", "sukienkę aksamitną"
+      ];
+
+      // 20 Rodzajów klamer/zacisków
+      const clampsTypes = [
+        "clover clamps", "spinacze z ciężarkami", "metalowe zaciski klamrowe", "zaciski klamrowe z dzwoneczkami",
+        "ciężkie zaciski śrubowe", "klamry sutkowe na łańcuszku", "zaciski z miękką osłonką",
+        "regulowane klamry sprężynowe", "małe klamerki zaciskowe", "zaciski z ozdobnymi piórkami",
+        "klamry z lekkim obciążeniem", "metalowe klipsy zaciskowe", "zaciski klamrowe połączone łańcuszkiem",
+        "klamry śrubowe z regulacją nacisku", "zaciski z silikonową podkładką", "małe spinacze z odważnikami",
+        "klipsy zaciskowe do intensywnej stymulacji", "klamry sprężynowe z dzwonkami", "zaciski rurkowe", "ciężkie klamry metalowe"
+      ];
+
+      // 20 Rodzajów ćwiczeń
+      const exerciseTypes = [
+        "chodzenie w szpilkach po prostej linii z książką na głowie",
+        "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
+        "trzymanie głębokiego przysiadu w szpilkach i sukience",
+        "wykonanie powolnych zakroków z zachowaniem idealnej postawy",
+        "poruszanie się na kolanach ze skrzyżowanymi kostkami z tyłu",
+        "chodzenie na palcach w szpilkach z rękami skutymi na plecach",
+        "utrzymanie pozycji 'jaskółki' (balans na jednej nodze) w szpilkach przez 2 minuty",
+        "chodzenie ze skrępowanymi kostkami ciasnym krokiem po pokoju",
+        "utrzymanie półprzysiadu przy ścianie z obcasami uniesionymi w górę",
+        "wykonanie 20 ukłonów przed lustrem ze skutymi dłońmi z przodu",
+        "stanie w pełnym wyproście ze złączonymi piętami i kajdankami na rękach przez 5 minut",
+        "klęczenie na twardej podłodze ze skutymi dłońmi za plecami i prostym kręgosłupem",
+        "chodzenie powolnym krokiem z rękami skutymi do pas/obroży",
+        "wykonanie 15 powolnych przysiadów ze skutymi kostkami",
+        "chodzenie tyłem po wyznaczonej prostej linii na obcasach",
+        "utrzymanie pozycji kucającej na palcach z kajdankami na nadgarstkach",
+        "chodzenie na kolanach ze skutymi nadgarstkami z tyłu i skrzyżowanymi nogami",
+        "utrzymanie nieruchomej pozycji uległej na kolanach z rękami z tyłu",
+        "wykonanie serii zakroków w miejscu ze skutymi rękami na plecach",
+        "powolne wznosy na palcach stóp w szpilkach z dłońmi spiętymi z tyłu"
+      ];
+
+      // 20 Modyfikatorów
+      const modifiers = [
+        "Modyfikator BDSM: Ręce zakute w skórzane/metalowe kajdanki za plecami na całe zadanie.",
+        "Modyfikator BDSM: Nogi skute w kajdanki na kostkach (uniemożliwiające szerokie kroki).",
+        "Modyfikator BDSM: Ręce zakute w kajdanki z przodu i spięte z obrożą.",
+        "Modyfikator BDSM: Pełne unieruchomienie – ręce zakute z tyłu, kostki spięte ciasnym pasem.",
+        "Modyfikator BDSM: Ręce zakute w sztywne kajdanki (posture cuffs) z tyłu na wysokości lędźwi.",
+        "Modyfikator BDSM: Całkowity gag/knebel w ustach przez całe zadanie.",
+        "Modyfikator BDSM: Ciasne opasanie twarzy i ust szalem oraz ręce zakute za plecami.",
+        "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold) oraz ręce zakute w kajdanki.",
+        "Modyfikator BDSM: Nogi złączone i ciasno zespawane/skute w kolanach i kostkach.",
+        "Modyfikator BDSM: Ręce unieruchomione kajdankami wokół talii.",
+        "Modyfikator Estetyczny: Pomaluj paznokcie u rąk i stóp na głęboki czerwony kolor.",
+        "Modyfikator Postawy: Obowiązkowa obroża posture collar oraz kajdanki na nadgarstkach z tyłu.",
+        "Modyfikator Milczenia: Bezgłośność – każdy jęk nakłada +15 klapsów, usta skneblowane.",
+        "Modyfikator BDSM: Kajdanki na ręce połączone łańcuchem z kajdankami na nogach.",
+        "Modyfikator Rygoru: Liczenie każdego uderzenia na głos z kneblem w ustach.",
+        "Modyfikator BDSM: Ręce zakute z tyłu nad łokciami, uniemożliwiające jakikolwiek ruch ramion.",
+        "Modyfikator Postawy: Zakaz opierania się i siadania, nogi spięte na szerokość 10 cm.",
+        "Modyfikator Sensoryczny: Owinięcie głowy 3 szalami, opaska na oczach i ręce zakute na plecach.",
+        "Modyfikator BDSM: Skute kostki i wymuszone poruszanie się wyłącznie malutkim kroczkiem.",
+        "Modyfikator BDSM: Dłonie zakute w rękawice bez palców spięte razem z tyłu."
+      ];
+
+      // 20 Kar za nieposłuszeństwo
+      const penalties = [
+        "KARA #1: Natychmiastowe 50 klapsów narzędziem: czarna packa ze skutymi rękami na plecach.",
+        "KARA #2: 5 minut klęczenia ze skutymi dłońmi z tyłu, obrożą posture collar i kneblem.",
+        "KARA #3: Wykonanie 30 głębokich ukłonów w szpilkach ze skutymi kostkami, z serią 15 klapsów.",
+        "KARA #4: Nałożenie 4 szalików na raz oraz kajdanków na ręce z tyłu na 15 minut.",
+        "KARA #5: Seria 100 mocnych klapsów używając ogon szczura w pozycji uległej ze skutymi rękami.",
+        "KARA #6: Stanie w bezruchu przy ścianie w obroży standard collar i kajdankach na nogach przez 10 minut.",
+        "KARA #7: Wymierzenie 75 klapsów czarną packą ze skutymi dłońmi z przodu.",
+        "KARA #8: Klęczenie na twardej podłodze w 3 szalikach z kajdankami na plecach przez 8 minut.",
+        "KARA #9: Nałożenie pełnego knebla, kajdanków na ręce i wykonanie 40 przysiadów.",
+        "KARA #10: Dopisanie 150 klapsów narzędziem: ogon szczura w skutych rękach na plecach.",
+        "KARA #11: Wytrzymanie w głębokim przysiadzie przy ścianie ze skutymi kostkami przez 3 minuty.",
+        "KARA #12: Trzymanie pozycji uległej na kolanach ze skutymi rękami i obrożą przez 10 minut.",
+        "KARA #13: Zamknięcie oczu opaską, ręce w kajdankach z tyłu i przyjęcie 60 klapsów.",
+        "KARA #14: Wykonanie 50 zakroków w obcisłej sukience ze skutymi kostkami nogi.",
+        "KARA #15: Klęczenie z głową opartą o krzesło, ręce zakute z tyłu i przyjęcie 80 klapsów.",
+        "KARA #16: Całkowity zakaz ruchu przez 12 minut w pełnym usztywnieniu (skute ręce i nogi).",
+        "KARA #17: Poruszanie się wyłącznie na kolanach ze skutymi nadgarstkami w 4 szalikach przez 10 min.",
+        "KARA #18: Wymierzenie sobie 200 klapsów ze skutymi dłońmi z przodu.",
+        "KARA #19: Wytrzymanie w skłonie z rękami skutymi na plecach i opaską na oczach przez 5 minut.",
+        "KARA #20: Założenie gaga, kajdanków na ręce i przyjęcie 50 klapsów w prawe i 50 w lewe pośladki."
+      ];
+
+      function buildTaskText(category, i) {
+        const br = bras[i % bras.length];
+        const pan = panties[i % panties.length];
+        const low = lowerLayers[i % lowerLayers.length];
+        const dr = dresses[i % dresses.length];
+        const col = collars[i % collars.length];
+        const sc = scarfCounts[i % scarfCounts.length];
+        const clamp = clampsTypes[i % clampsTypes.length];
+        const tool = spankingTools[i % spankingTools.length];
+        const ex = exerciseTypes[i % exerciseTypes.length];
+
+        const hasClaps = (i % 2 === 0);
+        const hasCuffs = (i % 3 === 0 || i % 5 === 0);
+
+        let text = "";
+        let cuffText = hasCuffs ? " Ręce zakute w kajdanki na plecach, kostki spięte paskiem." : "";
+
+        if (category === "feminizacja") {
+          text = `Załóż ${br}, ${pan}, ${low} oraz ${dr}. Obroża: ${col}, dodatek: ${sc}, zamocuj na piersiach: ${clamp}.${cuffText} Wykonaj serię eleganckich ukłonów przed lustrem.`;
+        } else if (category === "sensoryka") {
+          text = `Ubrana w ${br}, ${pan}, ${low}, ${dr}, obrożę: ${col}, ${sc}, opaskę na oczy (blindfold) oraz ${clamp}.${cuffText} Wytrzymaj w całkowitym bezruchu na krześle.`;
+        } else if (category === "postawa") {
+          text = `Ubrana w ${br}, ${pan}, ${low}, ${dr}, obrożę: ${col}, ${sc} i szpilki, zamocuj na piersiach: ${clamp}.${cuffText} Wykonaj wyzwanie: ${ex}.`;
+        } else if (category === "sluzbalczosc") {
+          text = `Ubrana w ${br}, ${pan}, ${low}, ${dr}, obrożę: ${col}, ${sc} i ${clamp}.${cuffText} Wykonaj dokładne polerowanie obuwia lub czyszczenie na kolanach.`;
+        }
+
+        if (hasClaps) {
+          text += ` Na zakończenie wymierz sobie {{CLAPS_PLACEHOLDER}} klapsów narzędziem: ${tool}.`;
+        }
+
+        return { category, text, hasClaps, baseClaps: clapCounts[i % clapCounts.length] };
+      }
+
+      const tasks = [
+        ...Array.from({length: 25}, (_, i) => buildTaskText("feminizacja", i)),
+        ...Array.from({length: 25}, (_, i) => buildTaskText("sensoryka", i)),
+        ...Array.from({length: 25}, (_, i) => buildTaskText("postawa", i)),
+        ...Array.from({length: 25}, (_, i) => buildTaskText("sluzbalczosc", i))
+      ];
+
+      const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+      document.getElementById("spinBtn").onclick = function() {
+        const cat = document.getElementById("categorySelect").value;
+        const filtered = cat === "ALL" ? tasks : tasks.filter(t => t.category === cat);
+        const task = filtered[Math.floor(Math.random() * filtered.length)];
+
+        const isExtreme = document.getElementById("extremeRigor").checked;
+        const claps = isExtreme ? task.baseClaps * 3 : task.baseClaps;
+
+        let finalText = task.text;
+        if (task.hasClaps) {
+          finalText = finalText.replace("{{CLAPS_PLACEHOLDER}}", claps);
+        }
+
+        document.getElementById("resCategory").innerText = "Wylosowane Zadanie (" + task.category.toUpperCase() + ")";
+        document.getElementById("resText").innerText = finalText;
+        document.getElementById("modifierDisplay").innerText = pick(modifiers);
+      };
+
+      document.getElementById("drawPenaltyBtn").onclick = function() {
+        document.getElementById("resCategory").innerText = "KARA ZA NIEPOSŁUSZEŃSTWO";
+        document.getElementById("resText").innerText = pick(penalties);
+        document.getElementById("modifierDisplay").innerText = "";
+      };
+
+      document.getElementById("generateOutfitBtn").onclick = function() {
+        document.getElementById("outfitBox").innerHTML = `
+          <li><strong>Obroża:</strong> ${pick(collars)}</li>
+          <li><strong>Góra (Bielizna):</strong> ${pick(bras)}</li>
+          <li><strong>Dół (Bielizna):</strong> ${pick(panties)}</li>
+          <li><strong>Nogi:</strong> ${pick(lowerLayers)}</li>
+          <li><strong>Główny Strój:</strong> ${pick(dresses)}</li>
+          <li><strong>Szaliki:</strong> ${pick(scarfCounts)}</li>
+          <li><strong>Zaciski/Klamry:</strong> ${pick(clampsTypes)}</li>
+          <li><strong>Narzędzie do klapsów:</strong> ${pick(spankingTools)}</li>
+        `;
+      };
+
+      let timer = 900;
+      let interval = null;
+      const display = document.getElementById("timerDisplay");
+
+      document.getElementById("startTimer").onclick = function() {
+        if (interval) return;
+        interval = setInterval(() => {
+          if (timer > 0) {
+            timer--;
+            let m = Math.floor(timer / 60).toString().padStart(2, '0');
+            let s = (timer % 60).toString().padStart(2, '0');
+            display.innerText = `${m}:${s}`;
+          } else {
+            clearInterval(interval);
+            interval = null;
+            alert("Czas zadania minął!");
+          }
+        }, 1000);
+      };
+
+      document.getElementById("resetTimer").onclick = function() {
+        clearInterval(interval);
+        interval = null;
+        timer = 900;
+        display.innerText = "15:00";
+      };
+    };
+  </script>
+
+</body>
+</html>
