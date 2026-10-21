@@ -13,6 +13,7 @@
       --accent-purple: #8b12a8;
       --accent-gold: #dfb256;
       --accent-red: #d92525;
+      --accent-green: #25d95b;
       --text-main: #f3e9f5;
       --text-muted: #a692ab;
     }
@@ -81,6 +82,15 @@
     .btn:hover { background: var(--accent-magenta); }
     .btn-danger { background: var(--accent-red); }
     .btn-danger:hover { background: #b01c1c; }
+    .btn-success { background: #1a8a3a; }
+    .btn-success:hover { background: #25d95b; color: #000; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 5px;
+    }
 
     .result-box {
       background: #0a060d;
@@ -88,7 +98,7 @@
       padding: 15px;
       border-radius: 6px;
       margin-top: 10px;
-      min-height: 80px;
+      min-height: 90px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -127,14 +137,27 @@
   <div class="container">
     <div class="card">
       <div class="flex-between">
-        <span class="session-badge" id="sessionCounter">Mecz nr: 1 (Zgony: 0)</span>
-        <button class="btn" style="width:auto; padding:6px 12px; margin:0; background:#555; font-size:0.75rem;" id="resetSessionBtn">Reset Meczu</button>
+        <span class="session-badge" id="sessionCounter">Statystyki: Fragi: 0 | Zgony: 0</span>
+        <button class="btn" style="width:auto; padding:6px 12px; margin:0; background:#555; font-size:0.75rem;" id="resetSessionBtn">Reset Statystyk</button>
       </div>
 
       <button class="btn" style="background:var(--accent-gold); color:#000; font-size:1rem; margin-bottom:15px;" id="generateOutfitBtn">Wygeneruj Strój do Gry w CS2</button>
 
-      <button class="btn" id="spinBtn" style="margin-top:5px;">Wylosuj Zasady / Karę za Śmierć w Rundzie</button>
-      <button class="btn btn-danger" id="drawPenaltyBtn" style="margin-top:10px;">Przegrany Mecz / Poddanie się (Kara)</button>
+      <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px;">Zdarzenia w rundzie:</div>
+      <div class="grid-2">
+        <button class="btn btn-success" id="fragBtn" style="margin-top:0;">Zadano Frag (Zabicie)</button>
+        <button class="btn btn-danger" id="deathBtn" style="margin-top:0;">Śmierć (Zgon)</button>
+      </div>
+      <div class="grid-2" style="margin-top: 8px;">
+        <button class="btn btn-success" id="winRoundBtn" style="margin-top:0;">Wygrana Runda</button>
+        <button class="btn btn-danger" id="loseRoundBtn" style="margin-top:0;">Przegrana Runda</button>
+      </div>
+
+      <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-top: 15px; margin-bottom: 5px;">Wynik meczu:</div>
+      <div class="grid-2">
+        <button class="btn" id="winMatchBtn" style="margin-top:0; background:#1a8a3a;">Wygrany Mecz</button>
+        <button class="btn btn-danger" id="loseMatchBtn" style="margin-top:0;">Przegrany Mecz</button>
+      </div>
     </div>
 
     <div class="card">
@@ -145,10 +168,10 @@
     </div>
 
     <div class="card">
-      <h3>Zdarzenie / Zasada na tę rundę:</h3>
+      <h3>Status / Reakcja Rygoru:</h3>
       <div class="result-box">
         <div id="resCategory" style="color: var(--accent-gold); font-size: 0.85rem; text-transform: uppercase; font-weight: bold;">Gotowy do gry</div>
-        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Uruchom CS2, wylosuj strój i kliknij losowanie zasad.</div>
+        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Uruchom CS2, wylosuj strój i klikaj odpowiednie przyciski w trakcie meczu.</div>
         <div id="modifierDisplay" style="color: var(--accent-magenta); margin-top: 10px; font-size: 0.9rem; font-weight: bold;"></div>
       </div>
     </div>
@@ -156,9 +179,9 @@
 
   <script>
     (function() {
+      var fragCount = 0;
       var deathCount = 0;
 
-      // Elementy stroju dostosowane do grania na klawiaturze i widzenia monitora
       var csCollars = [
         "posture collar (zaciągnięta, prostuje plecy podczas celowania)",
         "wysoka obroża z ringiem",
@@ -202,33 +225,46 @@
         "brak zacisków (skupienie na grze)"
       ];
 
-      // Modyfikatory nienaruszające pracy rąk na klawiaturze
-      var csModifiers = [
-        "Modyfikator Rąk: Dłonie wolne do myszki i klawiatury, ale nadgarstki spięte lekkim paskiem pod blatem.",
-        "Modyfikator Głosu: Jeśli giniesz, możesz mówić do drużyny wyłącznie stłumionym, jęczącym głosem.",
-        "Modyfikator Pozycji: Siedź na krześle z idealnie wyprostowanymi plecami (dzięki obroży), stopy złączone pod biurkiem.",
-        "Modyfikator Skupienia: Pełna widoczność monitora, ale zakaz gwałtownych ruchów myszką po śmierci.",
-        "Modyfikator Ciała: Pomaluj paznokcie na głęboki czerwony kolor przed uruchomieniem gry."
+      // Reakcje na FRAG (Zabicie wroga) - nagrody / podbicie satysfakcji
+      var fragEvents = [
+        "Dobra robota! Nagroda za fraga: Szybkie, dumnie uniesienie podbródka i uśmiech w obroży.",
+        "Zabójstwo zaliczone! Pochwal się drużynie stłumionym, kobiecym głosem w mikrofonie.",
+        "Precyzyjny frag! Nagroda: Przez następną minutę czujesz przyjemny dreszcz dumy ze swojej uległej formy.",
+        "Kolejny wróg w piachu. Nagroda: Delikatne dotknięcie i wygładzenie sukienki pod biurkiem."
       ];
 
-      // Zasady / minikary za zgony w rundzie CS2
-      var csRoundEvents = [
-        "Zgon w rundzie: Wykonaj 5 szybkich klapsów ogonem szczura lewą ręką (podczas gdy prawa trzyma myszkę).",
-        "Przegrana runda pistoletowa: Przez następne 3 rundy graj ze złączonymi kolanami.",
-        "Śmierć od Headshota: Zaciśnij zęby i przez całą kolejną rundę wydawaj ciche jęki w mikrofon.",
-        "Twój team przegrał rundę: Wyczyść szybko ekran lub biurko po tej rundzie jako pokorna służąca.",
-        "Zgon na początku rundy (First Blood): Odbierz sobie 10 klapsów różowym pejczem w przerwie zakupowej.",
-        "Wygrana runda (Clutch!): Nagroda – brak kary, pełne skupienie na kolejny punkt.",
-        "Śmierć z granata: Przez następną rundę graj ze skrzyżowanymi stopami pod biurkiem.",
-        "Zgon w plecy: Kara – natychmiastowe dociśnięcie obroży i 15 klapsów czarnym pejczem."
+      // Reakcje na ŚMIERĆ (Zgon) - małe kary w rundzie
+      var deathEvents = [
+        "Zgon! Mini-kara: Szybkie 3 klapsy ogonem szczura lewą ręką.",
+        "Zginęłaś! Mini-kara: Mocno zaciśnij zęby i przez całą rundę oglądania kolegów siedzisz ze złączonymi kolanami.",
+        "Zademonstrowano błąd. Mini-kara: Pociągnij za obrożę posture collar do samego dołu i weź głęboki oddech.",
+        "Śmierć w akcji. Mini-kara: Ciche, stłumione jęknięcie niezadowolenia w mikrofon."
       ];
 
-      var csPenalties = [
-        "Przegrany Mecz (Kara Główna 5x): 150 klapsów ogonem szczura w pełnym zakuciu, 10 minut klęczenia twarzą do ściany.",
-        "Poddanie meczu: 120 uderzeń czarnym pejczem i przymusowe rozebranie się z wierzchniej sukienki (zostaje sama bielizna i rajstopy).",
-        "Słaby wynik w tabeli: 90 klapsów różowym pejczem i 5 minut bezruchu na krześle z zamkniętymi oczami.",
-        "Zbyt częste śmierci: 100 klapsów i nałożenie dodatkowych 2 szalików na szyję do kolejnego meczu.",
-        "Zakończenie sesji z honorem: Jeśli utrzymałaś dyscyplinę przez cały mecz – brak kary, zasłużony odpoczynek w obroży!"
+      // Reakcje na WYGRANĄ RUNDĘ - nagroda
+      var winRoundEvents = [
+        "Runda wygrana! Nagroda: Chwila pełnego relaksu w obroży, rozluźnij ramiona na 10 sekund.",
+        "Sukces drużyny! Nagroda: Poczuj dumę jako zgrabna, zdyscyplinowana zawodniczka.",
+        "Wygrana! Nagroda: Delikatne poklepanie się po udzie w rajstopach za świetną robotę."
+      ];
+
+      // Reakcje na PRZEGRANĄ RUNDĘ - kara
+      var loseRoundEvents = [
+        "Przegrana runda! Kara: 15 mocnych klapsów czarnym pejczem w przerwie zakupowej.",
+        "Runda w plecy! Kara: Dociśnij obrożę i przez kolejne 2 rundy graj ze skrzyżowanymi stopami pod biurkiem.",
+        "Zawiodłaś drużynę w tej rundzie. Kara: 10 uderzeń różowym pejczem."
+      ];
+
+      // Wynik MECZU: WYGRANA
+      var matchWinEvents = [
+        "ZWYCIĘSTWO W MECZU! 👑 Nagroda królewska: Masz pełne prawo do dumy! Zdejmij jeden szalik, rozepnij obrożę i ciesz się wspaniałym wynikiem w swojej sukience.",
+        "Wspaniały mecz! Twój rygor przyniósł skutek. Nagroda: Pełne uznanie i zasłużony odpoczynek od kar przez resztę dnia."
+      ];
+
+      // Wynik MECZU: PRZEGRANA
+      var matchLoseEvents = [
+        "PRZEGRANY MECZ! 🚨 Główna kara: 150 klapsów ogonem szczura, 10 minut klęczenia twarzą do ściany w pełnym zakuciu w kajdanki na ręce i nogi.",
+        "Porażka w starciu. Kara: 120 uderzeń czarnym pejczem i przymusowe pozostanie w pełnym rygorystycznym zestawie bez rozпиnać przez 30 minut."
       ];
 
       function getRandom(arr) {
@@ -236,7 +272,7 @@
       }
 
       function updateCounter() {
-        document.getElementById("sessionCounter").innerText = "Mecz CS2 | Zgony w meczu: " + deathCount;
+        document.getElementById("sessionCounter").innerText = "Statystyki: Fragi: " + fragCount + " | Zgony: " + deathCount;
       }
 
       document.getElementById("generateOutfitBtn").onclick = function() {
@@ -250,28 +286,52 @@
           "<li><strong>Piersi:</strong> " + getRandom(csClamps) + "</li>";
       };
 
-      document.getElementById("spinBtn").onclick = function() {
-        deathCount++;
+      document.getElementById("fragBtn").onclick = function() {
+        fragCount++;
         updateCounter();
-
-        document.getElementById("resCategory").innerText = "Zdarzenie / Zasada po śmierci nr " + deathCount;
-        document.getElementById("resText").innerText = getRandom(csRoundEvents);
-        document.getElementById("modifierDisplay").innerText = getRandom(csModifiers);
+        document.getElementById("resCategory").innerText = "ZABÓJSTWO (FRAG)";
+        document.getElementById("resText").innerText = getRandom(fragEvents);
+        document.getElementById("modifierDisplay").innerText = "Dobry strzał!";
       };
 
-      document.getElementById("drawPenaltyBtn").onclick = function() {
-        document.getElementById("resCategory").innerText = "KARA ZA WYNIK MECZU / PODDANIE";
-        document.getElementById("resText").innerText = getRandom(csPenalties);
-        document.getElementById("modifierDisplay").innerText = "Mecz zakończony. Zresetuj licznik przed kolejną grą.";
-        deathCount = 0;
+      document.getElementById("deathBtn").onclick = function() {
+        deathCount++;
         updateCounter();
+        document.getElementById("resCategory").innerText = "ŚMIERĆ (ZGON)";
+        document.getElementById("resText").innerText = getRandom(deathEvents);
+        document.getElementById("modifierDisplay").innerText = "Musisz się poprawić w kolejnym starciu.";
+      };
+
+      document.getElementById("winRoundBtn").onclick = function() {
+        document.getElementById("resCategory").innerText = "WYGRANA RUNDA (NAGRODA)";
+        document.getElementById("resText").innerText = getRandom(winRoundEvents);
+        document.getElementById("modifierDisplay").innerText = "Dobra robota drużynowa.";
+      };
+
+      document.getElementById("loseRoundBtn").onclick = function() {
+        document.getElementById("resCategory").innerText = "PRZEGRANA RUNDA (KARA)";
+        document.getElementById("resText").innerText = getRandom(loseRoundEvents);
+        document.getElementById("modifierDisplay").innerText = "Wypełnij karę przed nową rundą.";
+      };
+
+      document.getElementById("winMatchBtn").onclick = function() {
+        document.getElementById("resCategory").innerText = "TRIUMF - WYGRANY MECZ";
+        document.getElementById("resText").innerText = getRandom(matchWinEvents);
+        document.getElementById("modifierDisplay").innerText = "Sesja zakończona sukcesem.";
+      };
+
+      document.getElementById("loseMatchBtn").onclick = function() {
+        document.getElementById("resCategory").innerText = "PORAŻKA - PRZEGRANY MECZ";
+        document.getElementById("resText").innerText = getRandom(matchLoseEvents);
+        document.getElementById("modifierDisplay").innerText = "Czas ponieść konsekwencje porażki.";
       };
 
       document.getElementById("resetSessionBtn").onclick = function() {
+        fragCount = 0;
         deathCount = 0;
         updateCounter();
-        document.getElementById("resCategory").innerText = "Mecz zresetowany";
-        document.getElementById("resText").innerText = "Powodzenia w kolejnym starciu w CS2!";
+        document.getElementById("resCategory").innerText = "Statystyki zresetowane";
+        document.getElementById("resText").innerText = "Powodzenia w nowym meczu w CS2!";
         document.getElementById("modifierDisplay").innerText = "";
       };
 
