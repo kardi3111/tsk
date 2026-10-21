@@ -169,6 +169,7 @@
         <option value="sensoryka">Sensoryka i Bezruch</option>
         <option value="postawa">Postawa i Szpilki</option>
         <option value="sluzbalczosc">Służalczość i Porządki</option>
+        <option value="izolacja">Izolacja i Deprywacja (30 zadań)</option>
       </select>
 
       <label class="checkbox-label">
@@ -272,7 +273,6 @@
         "Modyfikator BDSM: Ręce unieruchomione kajdankami wokół talii."
       ];
 
-      // Ponad 10 unikalnych rodzajów zadań w każdej kategorii
       var femTasks = [
         "Wykonaj serię eleganckich ukłonów przed lustrem z idealnie wyprostowanymi plecami.",
         "Przeglądaj się w lustrze z podniesioną brodą, celebrując kobiecy wygląd i sylwetkę.",
@@ -301,9 +301,9 @@
 
       var postureTasks = [
         "Chodź w szpilkach po prostej linii z książką lub pudełkiem zbalansowanym na głowie.",
-        "Wykonaj głębokie ukłony dworskie z zachowaniem idealnej prostej linii kręgosłupa.",
+        "Wykonaj głębokie ukłon dworskie z zachowaniem idealnej prostej linii kręgosłupa.",
         "Trzymaj głęboki, stabilny przysiad w szpilkach, z rękami spiętymi za plecami.",
-        "Wykonaj powolne, kontrolowane zakroki w miejscu z pełną stabilizacją sylwetki.",
+        "Wykonaj powolne, kontrolowane zakroki w miejscu z pełną stabilizacją sylwiekty.",
         "Stań przy ścianie piętami, łopatkami i potylicą, utrzymując perfekcyjną postawę.",
         "Wykonaj powolne wspięcia na palce stóp w szpilkach, utrzymując równowagę.",
         "Poruszaj się drobnym, uległym krokiem na palcach stóp w obcasach.",
@@ -325,6 +325,40 @@
         "Przetrzyj podłogę wokół fotela szmatką, nie podnosząc się z kolan ani na chwilę."
       ];
 
+      // 30 DEDYKOWANYCH ZADAŃ W KATEGORII IZOLACJA I DEPRYWACJA
+      var isolationTasks = [
+        "Szczelna deprywacja: Opaska blackout mask na oczy, knebel w ustach i uszy zakryte szalem. Wytrzymaj w bezruchu.",
+        "Kąt posłuszeństwa: Twarz zwrócona w stronę narożnika pokoju (5 cm od ściany). Oczy zamknięte, dłonie zakute z tyłu.",
+        "Ciemnia i klatka myśli: Przebywaj w całkowitym wyciemnieniu ze spiętymi dłońmi wokół kostek.",
+        "Izolacja czuciowa: Głowa owinięta 3 szalami i opaska na oczach. Zakaz poruszania palcami dłoni i stóp.",
+        "Ciasne unieruchomienie: Leżenie płasko na plecach z opaską na oczach, ręce i nogi spięte ciasnym pasem.",
+        "Ściana milczenia: Klęczenie przodem do ściany w pełnym zakuciu i kneblu bez wydawania jakichkolwiek dźwięków.",
+        "Niewidzialny świat: Oczy zakryte opaską, na szyi posture collar. Skupienie wyłącznie na ciężarze obroży.",
+        "Światło i cień: Stanie w absolutnym bezruchu na środku pokoju z zakrytymi oczami i rękami na lędźwiach.",
+        "Kapsuła sensoryczna: Knebel, opaska i szale owinięte wokół twarzy. Pozycja embrionalna na podłodze.",
+        "Absolutny brak bodźców: Siedzenie na krześle ze sztywnym kręgosłupem, dłonie zakute na udach, usta zasłonięte.",
+        "Wyciszenie kinetyczne: Zamknięte oczy, usta zablokowane szalem. Zakaz wykonywania nawet przełykania śliny czy poprawiania pozycji.",
+        "Korytarz ciemności: Leżenie pod ciężką kołdrą lub kocem z opaską na oczach i zablokowanymi ustami w pełnym bezruchu.",
+        "Izolacja w skłonie: Skłon tułowia do przodu w pozycji klęczącej (pozycja pokutna), twarz ukryta w poduszkach, brak widoczności.",
+        "Deprywacja wzrokowa na stojąco: Stanie ze złączonymi piętami w szpilkach, opaska na oczach i spętane dłonie na plecach.",
+        "Więzienie dźwięku: Słuchawki wyciszające na uszach, blindfold na oczach, obroża z unieruchomieniem brody.",
+        "Ciasny kokon: Owinięcie tułowia i głowy szalami, całkowity brak widoczności, ręce spięte z przodu w skórzanych mankietach.",
+        "Ciemny kąt w pozycji kucającej: Utrzymanie pozycji kucającej w szpilkach przy ścianie z zasłoniętymi oczami.",
+        "Niewola oddechu: Usta skneblowane i owinięte szalem, opaska blackout. Odliczanie w głowie powolnych oddechów.",
+        "Kotwica w bezruchu: Siedzenie po turecku, dłonie skute do pasa, blindfold. Pełne skupienie na ciężarze zacisków.",
+        "Ściana pusta: Stanie tyłem do ściany, głowa uniesiona w obroży, oczy mocno zamknięte pod opaską.",
+        "Izolacja dotykowa: Rękawice unieruchamiające dłonie, opaska na oczy i zakaz dotykania jakiejkolwiek części ciała.",
+        "Zamurowana cisza: Leżenie na boku ze spiętymi kolanami i kostkami, blindfold na oczach, brak swobody ruchów.",
+        "Pusta przestrzeń: Klęczenie na środku dywanu ze spiętymi dłońmi z tyłu i opaską zakrywającą całą twarz.",
+        "Strefa zero: Zamknięcie w ciasnej przestrzeni (np. przy szafie), usta skneblowane, wzrok zablokowany.",
+        "Deprywacja kinetyczna stóp: Kostki złączone i spięte ciasno, oczy zakryte, pełne skupienie na równowadze.",
+        "Pustka w głowie: Oczy zasłonięte, knebel w ustach. Zadanie polega na powstrzymaniu wszelkich myśli nieuzasadnionych uległością.",
+        "Klęcznik pokutny: Klęczenie na twardej podłodze z czołem opartym o ścianę, ręce zakute w kajdanki na lędźwiach.",
+        "Pętla sensoryczna: Nakładanie kolejno: knebel, opaska, 2 szale na głowę. Leżenie bez ruchu do sygnału stopera.",
+        "Izolacja statyczna: Stanie w szpilkach z rękami skutymi nad głową (lub spiętymi do obroży) i blindfoldem.",
+        "Ostateczne wyciszenie: Siedzenie na piętach ze spiętymi nadgarstkami z tyłu, opaską blackout i gęstym opasaniem twarzy szalem."
+      ];
+
       var penaltiesLevel0 = [
         "Rezygnacja bez walki! Kara 5x: Natychmiastowe 150 klapsów ogonem szczura w pełnym zakuciu w kajdanki na ręce i nogi, obroża posture collar z gagem na 15 minut.",
         "Ucieczka przed startem! Kara 5x: 120 uderzeń czarnym pejczem w pozycji uległej na kolanach ze skutymi rękami za plecami.",
@@ -335,7 +369,7 @@
 
       var penaltiesLevel1 = [
         "Poległaś na 1. zadaniu. Kara o sile 5x: 120 mocnych klapsów czarną packą ze skutymi rękami za plecami.",
-        "Potknięcie na starcie! Kara 5x: 100 uderzeń czarnym pejczem na stojąco w całkowitym milczeniu.",
+        "Potknięcie na starcie! Kara 5x: 100 uderzeń czarnym pejczem na standing w całkowitym milczeniu.",
         "Błąd na pierwszym kroku! Kara 5x: 110 klapsów ogonem szczura i 7 minut w pozycji głębokiego skłonu.",
         "Niedotrzymanie dyscypliny 1. stopnia! Kara 5x: 90 mocnych uderzeń różowym pejczem z rękami skutymi do lędźwi.",
         "Przerwanie otwarcia sesji! Kara 5x: 125 klapsów dłonią w skórzanej rękawiczce i zakuciu stóp na 10 minut."
@@ -381,8 +415,8 @@
         if (category === "sensoryka") return sensoryTasks;
         if (category === "postawa") return postureTasks;
         if (category === "sluzbalczosc") return serviceTasks;
-        // ALL: łączymy wszystkie
-        return [].concat(femTasks, sensoryTasks, postureTasks, serviceTasks);
+        if (category === "izolacja") return isolationTasks;
+        return [].concat(femTasks, sensoryTasks, postureTasks, serviceTasks, isolationTasks);
       }
 
       var timerInterval = null;
@@ -411,8 +445,8 @@
           var isExtreme = document.getElementById("extremeRigor").checked;
           var claps = isExtreme ? baseClaps * 3 : baseClaps;
 
-          var hasClaps = (Math.random() > 0.4); // ok 60% szans na klapsy
-          var hasCuffs = (Math.random() > 0.3); // częste kajdanki
+          var hasClaps = (Math.random() > 0.4);
+          var hasCuffs = (Math.random() > 0.3);
 
           var cuffText = hasCuffs ? " (Ręce zakute w kajdanki na plecach, kostki spięte paskiem)" : "";
           var finalText = baseTaskText + cuffText;
