@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generator Zadań i Rygoru Solo</title>
+  <title>Generator Zadań, Kar i Rygoru Solo</title>
   <style>
     body {
       background-color: #0a060d;
@@ -34,15 +34,15 @@
     <div class="card">
       <label>Kategoria Wyzwania:</label>
       <select id="categorySelect">
-        <option value="ALL">Wszystkie Kategorie (300)</option>
+        <option value="ALL">Wszystkie Kategorie</option>
         <option value="feminizacja">Sukienki i Feminizacja</option>
         <option value="sensoryka">Sensoryka i Bezruch</option>
         <option value="postawa">Postawa i Szpilki</option>
         <option value="sluzbalczosc">Służalczość i Porządki</option>
       </select>
 
-      <label style="display:block; margin-top:10px;">
-        <input type="checkbox" id="extremeRigor"> Bezwzględny Rygor (Klapsy x3)
+      <label style="display:block; margin-top:10px; color:#ff8080;">
+        <input type="checkbox" id="extremeRigor"> Tryb "Bezwzględny Rygor" (Liczba klapsów x3)
       </label>
 
       <button class="btn" id="spinBtn" style="margin-top:15px;">Wylosuj Zadanie</button>
@@ -54,13 +54,13 @@
       <h3>Wynik Losowania:</h3>
       <div class="result-box">
         <div id="resCategory" style="color: #dfb256; font-size: 0.8rem; text-transform: uppercase;">Gotowy</div>
-        <div id="resText" style="margin-top: 8px;">Kliknij przycisk powyżej, aby rozpocząć.</div>
-        <div id="modifierDisplay" style="color: #e02585; margin-top: 8px; font-size: 0.85rem;"></div>
+        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Kliknij przycisk powyżej, aby rozpocząć.</div>
+        <div id="modifierDisplay" style="color: #e02585; margin-top: 10px; font-size: 0.85rem; font-weight: bold;"></div>
       </div>
     </div>
 
     <div class="card">
-      <h3>Stoper</h3>
+      <h3>Stoper Odliczający</h3>
       <div class="timer" id="timerDisplay">15:00</div>
       <div style="display:flex; gap:10px;">
         <button class="btn" id="startTimer">Start</button>
@@ -70,15 +70,14 @@
 
     <div class="card">
       <h3>Wylosowany Strój:</h3>
-      <ul id="outfitBox" style="font-size: 0.9rem; padding-left: 20px; line-height: 1.5;">
+      <ul id="outfitBox" style="font-size: 0.9rem; padding-left: 20px; line-height: 1.6;">
         <li>Brak wygenerowanego stroju.</li>
       </ul>
     </div>
   </div>
 
   <script>
-    // Tablice danych
-    const clapCounts = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100];
+    const clapCounts = [10, 15, 20, 25, 30, 40, 50, 75, 100];
     const spankingTools = ["czarna packa", "różowa packa", "ogon szczura", "dłoń"];
     const collars = ["posture collar", "standard collar", "brak obroży"];
     const bras = ["sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "brak biustonosza"];
@@ -89,44 +88,71 @@
     const dresses = ["sukienkę bodycon", "sukienkę maxi", "rozkloszowaną spódnicę i bluzkę", "ołówkową spódnicę", "kwiatową sukienkę", "małą czarną", "sukienkę midi", "dzianinową sukienkę"];
     
     const modifiers = [
-      "Modyfikator BDSM: Całkowity gag/knebel w ustach.",
+      "Modyfikator BDSM: Całkowity gag/knebel w ustach przez całe zadanie.",
       "Modyfikator BDSM: Ciasne opasanie twarzy i ust szalem.",
-      "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold).",
-      "Modyfikator BDSM: Ręce uwiązane lub skrzyżowane na plecach.",
+      "Modyfikator Sensoryczny: Szczelna opaska na oczy (blindfold) przez cały czas.",
+      "Modyfikator BDSM: Ręce uwiązane lub mocno skrzyżowane na plecach.",
       "Modyfikator Estetyczny: Pomaluj paznokcie na głęboki czerwony kolor.",
-      "Modyfikator Postawy: Obowiązkowa obroża posture collar."
+      "Modyfikator Postawy: Obowiązkowa obroża posture collar zaciągnięta wysoko."
     ];
 
     const penalties = [
-      "KARA: 50 klapsów narzędziem: czarna packa na stojąco.",
-      "KARA: 5 minut klęczenia z obrożą posture collar i kneblem.",
-      "KARA: 30 głębokich ukłonów w szpilkach, z serią 5 klapsów.",
-      "KARA: Nałożenie 4 szalików na raz jako wyciszenie na 15 minut.",
-      "KARA: Seria 100 mocnych klapsów używając ogon szczura."
+      "KARA #1: Natychmiastowe 50 klapsów narzędziem: czarna packa na stojąco.",
+      "KARA #2: 5 minut klęczenia z obrożą posture collar i kneblem w ustach.",
+      "KARA #3: Wykonanie 30 głębokich ukłonów w szpilkach, z serią 15 klapsów narzędziem: różowa packa.",
+      "KARA #4: Nałożenie 4 szalików na raz jako wyciszenie na kolejne 15 minut.",
+      "KARA #5: Seria 100 mocnych klapsów używając ogon szczura w pozycji uległej.",
+      "KARA #6: Stanie w bezruchu przy ścianie w obroży standard collar przez 10 minut."
     ];
 
-    // Generowanie zadań
+    const exerciseTypes = [
+      "chodzenie w szpilkach po prostej linii kafelków z książką na głowie",
+      "wykonanie głębokich ukłonów dworskich z wyprostowanymi plecami",
+      "trzymanie głębokiego przysiadu w szpilkach i sukience",
+      "wykonanie powolnych zakroków z zachowaniem idealnej postawy",
+      "poruszanie się na kolanach ze skrzyżowanymi kostkami z tyłu"
+    ];
+
+    // Funkcja pomocnicza do budowania tekstu zadania
+    function buildTaskText(category, i) {
+      const br = bras[i % bras.length];
+      const pan = panties[i % panties.length];
+      const low = lowerLayers[i % lowerLayers.length];
+      const dr = dresses[i % dresses.length];
+      const col = collars[i % collars.length];
+      const sc = scarfCounts[i % scarfCounts.length];
+      const pas = pastiesTypes[i % pastiesTypes.length];
+      const tool = spankingTools[i % spankingTools.length];
+      const ex = exerciseTypes[i % exerciseTypes.length];
+
+      // Szansa ~50% na to, że w zadaniu będą klapsy
+      const hasClaps = (i % 2 === 0);
+
+      let text = "";
+
+      if (category === "feminizacja") {
+        text = `Załóż ${br}, ${pan}, ${low} oraz ${dr}. Obroża: ${col}, dodatek: ${sc}, zamocuj ${pas}. Wykonaj seria eleganckich ukłonów przed lustrem.`;
+      } else if (category === "sensoryka") {
+        text = `Ubrana w ${br}, ${pan}, ${low}, ${dr}, obrożę: ${col}, ${sc} oraz opaskę na oczy (blindfold), wytrzymaj w całkowitym bezruchu na krześle.`;
+      } else if (category === "postawa") {
+        text = `Ubrana w ${br}, ${pan}, ${low}, ${dr}, obrożę: ${col}, ${sc} i szpilki, zamocuj ${pas}. Wykonaj wyzwanie: ${ex}.`;
+      } else if (category === "sluzbalczosc") {
+        text = `Ubrana w ${br}, ${pan}, ${low}, ${dr}, obrożę: ${col}, ${sc} i ${pas}, wykonaj dokładne polerowanie obuwia lub czyszczenie na kolanach.`;
+      }
+
+      if (hasClaps) {
+        text += ` Na zakończenie wymierz sobie {{CLAPS_PLACEHOLDER}} klapsów narzędziem: ${tool}.`;
+      }
+
+      return { category, text, hasClaps, baseClaps: clapCounts[i % clapCounts.length] };
+    }
+
+    // Generowanie pełnej bazy 100 zadań
     const tasks = [
-      ...Array.from({length: 25}, (_, i) => ({
-        category: "feminizacja",
-        text: `Załóż ${bras[i%bras.length]}, ${panties[i%panties.length]}, ${lowerLayers[i%lowerLayers.length]} oraz ${dresses[i%dresses.length]}. Obroża: ${collars[i%collars.length]}, dodatek: ${scarfCounts[i%scarfCounts.length]}. Wymierz serię klapsów narzędziem: ${spankingTools[i%spankingTools.length]}.`,
-        baseClaps: clapCounts[i % clapCounts.length]
-      })),
-      ...Array.from({length: 25}, (_, i) => ({
-        category: "sensoryka",
-        text: `Wycisz się w bezruchu na krześle ubranej w ${bras[i%bras.length]}, ${lowerLayers[i%lowerLayers.length]}, obroża: ${collars[i%collars.length]}, ${scarfCounts[i%scarfCounts.length]}. Na koniec klapsy narzędziem: ${spankingTools[i%spankingTools.length]}.`,
-        baseClaps: clapCounts[i % clapCounts.length]
-      })),
-      ...Array.from({length: 25}, (_, i) => ({
-        category: "postawa",
-        text: `Wykonaj ćwiczenia postawy w szpilkach, obroży (${collars[i%collars.length]}) i ${scarfCounts[i%scarfCounts.length]}. Zakończ serią klapsów narzędziem: ${spankingTools[i%spankingTools.length]}.`,
-        baseClaps: clapCounts[i % clapCounts.length]
-      })),
-      ...Array.from({length: 25}, (_, i) => ({
-        category: "sluzbalczosc",
-        text: `Wykonaj porządki na kolanach w ${bras[i%bras.length]}, ${dresses[i%dresses.length]}, obroża: ${collars[i%collars.length]}. Klapsy narzędziem: ${spankingTools[i%spankingTools.length]}.`,
-        baseClaps: clapCounts[i % clapCounts.length]
-      }))
+      ...Array.from({length: 25}, (_, i) => buildTaskText("feminizacja", i)),
+      ...Array.from({length: 25}, (_, i) => buildTaskText("sensoryka", i)),
+      ...Array.from({length: 25}, (_, i) => buildTaskText("postawa", i)),
+      ...Array.from({length: 25}, (_, i) => buildTaskText("sluzbalczosc", i))
     ];
 
     // Logika przycisków
@@ -138,8 +164,13 @@
       const isExtreme = document.getElementById("extremeRigor").checked;
       const claps = isExtreme ? task.baseClaps * 3 : task.baseClaps;
 
+      let finalText = task.text;
+      if (task.hasClaps) {
+        finalText = finalText.replace("{{CLAPS_PLACEHOLDER}}", claps);
+      }
+
       document.getElementById("resCategory").innerText = "Wylosowane Zadanie (" + task.category.toUpperCase() + ")";
-      document.getElementById("resText").innerText = task.text.replace("serię klapsów", claps + " klapsów");
+      document.getElementById("resText").innerText = finalText;
       
       const mod = document.getElementById("modifierDisplay");
       mod.innerText = modifiers[Math.floor(Math.random() * modifiers.length)];
@@ -156,12 +187,12 @@
       const pick = arr => arr[Math.floor(Math.random() * arr.length)];
       document.getElementById("outfitBox").innerHTML = `
         <li><strong>Obroża:</strong> ${pick(collars)}</li>
-        <li><strong>Góra:</strong> ${pick(bras)}</li>
-        <li><strong>Dół:</strong> ${pick(panties)}</li>
+        <li><strong>Góra (Bielizna):</strong> ${pick(bras)}</li>
+        <li><strong>Dół (Bielizna):</strong> ${pick(panties)}</li>
         <li><strong>Nogi:</strong> ${pick(lowerLayers)}</li>
-        <li><strong>Strój:</strong> ${pick(dresses)}</li>
+        <li><strong>Główny Strój:</strong> ${pick(dresses)}</li>
         <li><strong>Szaliki:</strong> ${pick(scarfCounts)}</li>
-        <li><strong>Narzędzie:</strong> ${pick(spankingTools)}</li>
+        <li><strong>Narzędzie do klapsów:</strong> ${pick(spankingTools)}</li>
       `;
     };
 
@@ -181,7 +212,7 @@
         } else {
           clearInterval(interval);
           interval = null;
-          alert("Czas minal!");
+          alert("Czas zadania minął!");
         }
       }, 1000);
     };
