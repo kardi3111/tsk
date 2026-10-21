@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS2 Solo Rygor & Feminizacja</title>
+  <style>
+    :root {
+      --bg-main: #0a060d;
+      --bg-card: #1a0f1f;
+      --border-card: #b45096;
+      --accent-magenta: #e02585;
+      --accent-purple: #8b12a8;
+      --accent-gold: #dfb256;
+      --accent-red: #d92525;
+      --text-main: #f3e9f5;
+      --text-muted: #a692ab;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: var(--accent-magenta);
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .card h3 {
+      color: var(--accent-gold);
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(180, 80, 150, 0.3);
+      padding-bottom: 5px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-purple);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover { background: var(--accent-magenta); }
+    .btn-danger { background: var(--accent-red); }
+    .btn-danger:hover { background: #b01c1c; }
+
+    .result-box {
+      background: #0a060d;
+      border: 1px dashed var(--accent-magenta);
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 10px;
+      min-height: 80px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .session-badge {
+      background: var(--accent-purple);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    ul.outfit-list {
+      font-size: 0.9rem;
+      padding-left: 20px;
+      line-height: 1.7;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CS2 Solo Rygor & Feminizacja</h1>
+
+  <div class="container">
+    <div class="card">
+      <div class="flex-between">
+        <span class="session-badge" id="sessionCounter">Mecz nr: 1 (Zgony: 0)</span>
+        <button class="btn" style="width:auto; padding:6px 12px; margin:0; background:#555; font-size:0.75rem;" id="resetSessionBtn">Reset Meczu</button>
+      </div>
+
+      <button class="btn" style="background:var(--accent-gold); color:#000; font-size:1rem; margin-bottom:15px;" id="generateOutfitBtn">Wygeneruj Strój do Gry w CS2</button>
+
+      <button class="btn" id="spinBtn" style="margin-top:5px;">Wylosuj Zasady / Karę za Śmierć w Rundzie</button>
+      <button class="btn btn-danger" id="drawPenaltyBtn" style="margin-top:10px;">Przegrany Mecz / Poddanie się (Kara)</button>
+    </div>
+
+    <div class="card">
+      <h3>Twój Strój do CS2:</h3>
+      <ul class="outfit-list" id="outfitBox">
+        <li>Kliknij przycisk powyżej, aby przygotować ekwipunek do gry.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Zdarzenie / Zasada na tę rundę:</h3>
+      <div class="result-box">
+        <div id="resCategory" style="color: var(--accent-gold); font-size: 0.85rem; text-transform: uppercase; font-weight: bold;">Gotowy do gry</div>
+        <div id="resText" style="margin-top: 8px; font-size: 1.05rem; line-height: 1.4;">Uruchom CS2, wylosuj strój i kliknij losowanie zasad.</div>
+        <div id="modifierDisplay" style="color: var(--accent-magenta); margin-top: 10px; font-size: 0.9rem; font-weight: bold;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var deathCount = 0;
+
+      // Elementy stroju dostosowane do grania na klawiaturze i widzenia monitora
+      var csCollars = [
+        "posture collar (zaciągnięta, prostuje plecy podczas celowania)",
+        "wysoka obroża z ringiem",
+        "szeroka obroża skórzana",
+        "obroża z miękkim wyściełaniem"
+      ];
+
+      var csBras = [
+        "sportowy biustonosz", "koronkowy biustonosz", "biustonosz push-up", "biustonosz gładki czarny"
+      ];
+
+      var csPanties = [
+        "ciasne stringi", "figi koronkowe", "brak majtek", "figi bezszwowe"
+      ];
+
+      var csScarves = [
+        "2 szaliki owinięte ciasno wokół szyi (stłumiony głos w mikrofonie)",
+        "1 ciężki szal blanket scarf pod obrożą",
+        "komin dzianinowy podciągnięty wysoko pod brodę",
+        "3 szale ograniczające ruchy głowy na boki"
+      ];
+
+      var csLower = [
+        "grube czarne rajstopy (100D)",
+        "prześwitujące czarne rajstopy",
+        "dopasowane elastyczne legginsy",
+        "kabaretki o drobnym oczku"
+      ];
+
+      var csDresses = [
+        "krótka dopasowana sukienka bodycon (dająca pełną swobodę nóg pod biurkiem)",
+        "dzianinowa sukienka",
+        "rozkloszowana spódnica i krótki top",
+        "mała czarna"
+      ];
+
+      var csClamps = [
+        "clover clamps na piersiach (dla dodatkowego bodźca podczas celowania)",
+        "lekki zacisk klamrowy",
+        "spinacze z delikatnym obciążeniem",
+        "brak zacisków (skupienie na grze)"
+      ];
+
+      // Modyfikatory nienaruszające pracy rąk na klawiaturze
+      var csModifiers = [
+        "Modyfikator Rąk: Dłonie wolne do myszki i klawiatury, ale nadgarstki spięte lekkim paskiem pod blatem.",
+        "Modyfikator Głosu: Jeśli giniesz, możesz mówić do drużyny wyłącznie stłumionym, jęczącym głosem.",
+        "Modyfikator Pozycji: Siedź na krześle z idealnie wyprostowanymi plecami (dzięki obroży), stopy złączone pod biurkiem.",
+        "Modyfikator Skupienia: Pełna widoczność monitora, ale zakaz gwałtownych ruchów myszką po śmierci.",
+        "Modyfikator Ciała: Pomaluj paznokcie na głęboki czerwony kolor przed uruchomieniem gry."
+      ];
+
+      // Zasady / minikary za zgony w rundzie CS2
+      var csRoundEvents = [
+        "Zgon w rundzie: Wykonaj 5 szybkich klapsów ogonem szczura lewą ręką (podczas gdy prawa trzyma myszkę).",
+        "Przegrana runda pistoletowa: Przez następne 3 rundy graj ze złączonymi kolanami.",
+        "Śmierć od Headshota: Zaciśnij zęby i przez całą kolejną rundę wydawaj ciche jęki w mikrofon.",
+        "Twój team przegrał rundę: Wyczyść szybko ekran lub biurko po tej rundzie jako pokorna służąca.",
+        "Zgon na początku rundy (First Blood): Odbierz sobie 10 klapsów różowym pejczem w przerwie zakupowej.",
+        "Wygrana runda (Clutch!): Nagroda – brak kary, pełne skupienie na kolejny punkt.",
+        "Śmierć z granata: Przez następną rundę graj ze skrzyżowanymi stopami pod biurkiem.",
+        "Zgon w plecy: Kara – natychmiastowe dociśnięcie obroży i 15 klapsów czarnym pejczem."
+      ];
+
+      var csPenalties = [
+        "Przegrany Mecz (Kara Główna 5x): 150 klapsów ogonem szczura w pełnym zakuciu, 10 minut klęczenia twarzą do ściany.",
+        "Poddanie meczu: 120 uderzeń czarnym pejczem i przymusowe rozebranie się z wierzchniej sukienki (zostaje sama bielizna i rajstopy).",
+        "Słaby wynik w tabeli: 90 klapsów różowym pejczem i 5 minut bezruchu na krześle z zamkniętymi oczami.",
+        "Zbyt częste śmierci: 100 klapsów i nałożenie dodatkowych 2 szalików na szyję do kolejnego meczu.",
+        "Zakończenie sesji z honorem: Jeśli utrzymałaś dyscyplinę przez cały mecz – brak kary, zasłużony odpoczynek w obroży!"
+      ];
+
+      function getRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function updateCounter() {
+        document.getElementById("sessionCounter").innerText = "Mecz CS2 | Zgony w meczu: " + deathCount;
+      }
+
+      document.getElementById("generateOutfitBtn").onclick = function() {
+        document.getElementById("outfitBox").innerHTML =
+          "<li><strong>Obroża:</strong> " + getRandom(csCollars) + "</li>" +
+          "<li><strong>Góra (Bielizna):</strong> " + getRandom(csBras) + "</li>" +
+          "<li><strong>Dół (Bielizna):</strong> " + getRandom(csPanties) + "</li>" +
+          "<li><strong>Szyja:</strong> " + getRandom(csScarves) + "</li>" +
+          "<li><strong>Nogi:</strong> " + getRandom(csLower) + "</li>" +
+          "<li><strong>Strój główny:</strong> " + getRandom(csDresses) + "</li>" +
+          "<li><strong>Piersi:</strong> " + getRandom(csClamps) + "</li>";
+      };
+
+      document.getElementById("spinBtn").onclick = function() {
+        deathCount++;
+        updateCounter();
+
+        document.getElementById("resCategory").innerText = "Zdarzenie / Zasada po śmierci nr " + deathCount;
+        document.getElementById("resText").innerText = getRandom(csRoundEvents);
+        document.getElementById("modifierDisplay").innerText = getRandom(csModifiers);
+      };
+
+      document.getElementById("drawPenaltyBtn").onclick = function() {
+        document.getElementById("resCategory").innerText = "KARA ZA WYNIK MECZU / PODDANIE";
+        document.getElementById("resText").innerText = getRandom(csPenalties);
+        document.getElementById("modifierDisplay").innerText = "Mecz zakończony. Zresetuj licznik przed kolejną grą.";
+        deathCount = 0;
+        updateCounter();
+      };
+
+      document.getElementById("resetSessionBtn").onclick = function() {
+        deathCount = 0;
+        updateCounter();
+        document.getElementById("resCategory").innerText = "Mecz zresetowany";
+        document.getElementById("resText").innerText = "Powodzenia w kolejnym starciu w CS2!";
+        document.getElementById("modifierDisplay").innerText = "";
+      };
+
+      updateCounter();
+    })();
+  </script>
+
+</body>
+</html>
